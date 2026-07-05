@@ -36,10 +36,10 @@ export default function RegisterPage() {
       return;
     }
 
-    // Verify format: Tanzanian numbers typically start with 07 or 06 (9-10 digits)
-    const phoneRegex = /^(06|07|255)\d{8}$/;
+    // Tanzanian numbers: 07XXXXXXXX, 06XXXXXXXX (10 digits), or 255XXXXXXXXX (12 digits)
+    const phoneRegex = /^(0[67]\d{8}|255\d{9})$/;
     if (!phoneRegex.test(phoneNumber)) {
-      setError("Invalid phone. Use Tanzanian format: 07XXXXXXXX or 06XXXXXXXX.");
+      setError("Invalid phone. Use Tanzanian format: 07XXXXXXXX, 06XXXXXXXX, or 255XXXXXXXXX.");
       setLoading(false);
       return;
     }
@@ -90,13 +90,37 @@ export default function RegisterPage() {
         if (signUpErr) {
           setError(signUpErr.message);
         } else if (data.user) {
-          // Profile is created via Postgres trigger
-          // Fetch the profile
-          const { data: profileData } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", data.user.id)
-            .single();
+          // Profile is created via Postgres trigger — retry up to 5 times with 500ms delay
+          let profileData = null;
+          let attempts = 0;
+          while (!profileData && attempts < 5) {
+            const { data: prof } = await supabase
+              .from("profiles")
+              .select("*")
+              .eq("id", data.user.id)
+              .maybeSingle();
+            if (prof) {
+              profileData = prof;
+              break;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            attempts++;
+          }
+
+          // Fallback profile if trigger takes too long
+          if (!profileData) {
+            profileData = {
+              id: data.user.id,
+              username: username,
+              phone_number: phoneNumber,
+              role: "gamer" as const,
+              status: "active" as const,
+              tasks_completed: 0,
+              success_rate: 100,
+              total_earnings: 0,
+              created_at: new Date().toISOString()
+            };
+          }
 
           setAuth(data.user, profileData);
           router.push("/dashboard");

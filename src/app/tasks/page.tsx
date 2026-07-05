@@ -27,8 +27,11 @@ function TasksContent() {
       return;
     }
     const loadData = async () => {
-      await initializeData();
-      setLoading(false);
+      try {
+        await initializeData();
+      } finally {
+        setLoading(false);
+      }
     };
     loadData();
   }, [user, initializeData, router]);
@@ -202,8 +205,10 @@ function TasksContent() {
           ) : (
             /* Submissions list */
             <div className="flex flex-col gap-3.5">
-              {submissions.length > 0 ? (
-                submissions.map((sub) => {
+              {submissions.filter(s => s.user_id === user?.id).length > 0 ? (
+                submissions
+                  .filter(s => s.user_id === user?.id)
+                  .map((sub) => {
                   return (
                     <div
                       key={sub.id}

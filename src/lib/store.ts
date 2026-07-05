@@ -338,7 +338,7 @@ const initialMockMessages: Message[] = [
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      isMockMode: false,
+      isMockMode: true,
       setMockMode: (val) => set({ isMockMode: val }),
       
       user: null,
@@ -415,7 +415,19 @@ export const useAppStore = create<AppState>()(
         if (!isMockMode) {
           await supabase.auth.signOut();
         }
-        set({ user: null, profile: null });
+        // Reset ALL state on logout to prevent stale data from bleeding into next session
+        set({
+          user: null,
+          profile: null,
+          profiles: initialMockProfiles,
+          tasks: initialMockTasks,
+          submissions: initialMockSubmissions,
+          transactions: initialMockTransactions,
+          notifications: initialMockNotifications,
+          messages: initialMockMessages,
+          payoutMethods: [],
+          pendingOfflineActions: [],
+        });
       },
       
       initializeData: async () => {
@@ -616,7 +628,8 @@ export const useAppStore = create<AppState>()(
         const { isMockMode, user, profile, transactions, initializeData, isOnline } = get();
         if (!user || !profile) return { success: false, message: "User not authenticated" };
         
-        if (profile.total_earnings - (profile.tasks_completed * 10) < amount && getAvailableBalance(profile, transactions) < amount) {
+        // Check available balance only — the old formula was incorrect
+        if (getAvailableBalance(profile, transactions) < amount) {
           return { success: false, message: "Insufficient balance" };
         }
         
@@ -841,7 +854,10 @@ export const useAppStore = create<AppState>()(
             tasks: [newTask, ...tasks]
           });
         } else {
-          await supabase.from("tasks").insert(taskInput);
+          await supabase.from("tasks").insert({
+            ...taskInput,
+            status: "published",
+          });
           await initializeData();
         }
       },

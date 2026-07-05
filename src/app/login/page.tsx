@@ -27,10 +27,10 @@ export default function LoginPage() {
       return;
     }
 
-    // Verify format: Tanzanian numbers typically start with 07 or 06 (9-10 digits)
-    const phoneRegex = /^(06|07|255)\d{8}$/;
+    // Tanzanian numbers: 07XXXXXXXX, 06XXXXXXXX (10 digits), or 255XXXXXXXXX (12 digits)
+    const phoneRegex = /^(0[67]\d{8}|255\d{9})$/;
     if (!phoneRegex.test(phoneNumber)) {
-      setError("Invalid phone number. Format: 07XXXXXXXX or 06XXXXXXXX.");
+      setError("Invalid phone number. Format: 07XXXXXXXX, 06XXXXXXXX, or 255XXXXXXXXX.");
       setLoading(false);
       return;
     }

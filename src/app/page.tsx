@@ -175,7 +175,7 @@ export default function SplashPage() {
               Taskforce Zero
             </h1>
             <p className="text-[#A1A1AA] text-sm max-w-[280px]">
-              Tanzania&apos;s Delta Force gold farming workforce marketplace.
+              Tanzania&apos;s Delta Force  workforce recruitment.
             </p>
           </div>
 

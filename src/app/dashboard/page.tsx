@@ -38,15 +38,16 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Redirect if not logged in
     if (!user) {
       router.push("/");
       return;
     }
-
     const loadData = async () => {
-      await initializeData();
-      setLoading(false);
+      try {
+        await initializeData();
+      } finally {
+        setLoading(false);
+      }
     };
     loadData();
   }, [user, initializeData, router]);

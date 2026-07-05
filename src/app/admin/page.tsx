@@ -13,7 +13,6 @@ import {
   Check, 
   X, 
   Search, 
-  ArrowLeft, 
   MessageSquare,
   LogOut
 } from "lucide-react";
@@ -256,30 +255,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              // Quick exit back to Gamer dashboard
-              const gamerProfile = {
-                id: "gamer-1",
-                username: "Juma_Fighter",
-                phone_number: "0712345678",
-                role: "gamer" as const,
-                status: "active" as const,
-                tasks_completed: 18,
-                success_rate: 94.4,
-                total_earnings: 135000,
-                created_at: new Date().toISOString()
-              };
-              useAppStore.setState({ profile: gamerProfile, user: { id: gamerProfile.id, phone: gamerProfile.phone_number } });
-              router.push("/dashboard");
-            }}
-            className="py-2 px-4 bg-[#262626] hover:bg-[#323232] rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer text-white"
-          >
-            <ArrowLeft size={14} />
-            <span>Gamer View</span>
-          </button>
-        </div>
+
       </header>
 
       {/* Main Workspace layout */}
@@ -340,7 +316,7 @@ export default function AdminDashboardPage() {
                 {[
                   { label: "Total Registered Gamers", val: stats.totalUsers, icon: Users, color: "text-[#124715]" },
                   { label: "Active Gamers", val: stats.activeUsers, icon: Users, color: "text-[#124715]" },
-                  { label: "Pending Reviews", val: stats.pendingReviews, icon: FileCheck, color: "text-amber-500" },
+                  { label: "Active Gamer Threads", val: stats.pendingReviews, icon: FileCheck, color: "text-amber-500" },
                   { label: "Pending Withdrawals", val: stats.pendingWithdrawals, icon: ArrowDownToLine, color: "text-red-400" }
                 ].map((s, idx) => {
                   const Icon = s.icon;
@@ -489,27 +465,33 @@ export default function AdminDashboardPage() {
               <div className="flex flex-col gap-4">
                 <h3 className="text-base font-bold text-white">Active Tasks</h3>
                 <div className="flex flex-col gap-3">
-                  {tasks.map(t => (
-                    <div key={t.id} className="p-4 bg-[#181818] border border-[#262626] rounded-2xl flex justify-between items-center">
-                      <div className="flex flex-col gap-1 max-w-[70%]">
-                        <span className="text-xs font-bold text-white">{t.title}</span>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[9px] text-[#A1A1AA] bg-[#262626] px-2 py-0.5 rounded font-bold capitalize">
-                            {t.difficulty}
-                          </span>
-                          <span className="text-[10px] text-[#A1A1AA]">
-                            {t.reward_tzs.toLocaleString()} TZS
-                          </span>
+                  {tasks.length > 0 ? (
+                    tasks.map(t => (
+                      <div key={t.id} className="p-4 bg-[#181818] border border-[#262626] rounded-2xl flex justify-between items-center">
+                        <div className="flex flex-col gap-1 max-w-[70%]">
+                          <span className="text-xs font-bold text-white">{t.title}</span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-[9px] text-[#A1A1AA] bg-[#262626] px-2 py-0.5 rounded font-bold capitalize">
+                              {t.difficulty}
+                            </span>
+                            <span className="text-[10px] text-[#A1A1AA]">
+                              {t.reward_tzs.toLocaleString()} TZS
+                            </span>
+                          </div>
                         </div>
+                        <button
+                          onClick={() => deleteTask(t.id)}
+                          className="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-all cursor-pointer"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
-                      <button
-                        onClick={() => deleteTask(t.id)}
-                        className="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-all cursor-pointer"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                    ))
+                  ) : (
+                    <div className="p-6 bg-[#111111] border border-[#262626] border-dashed rounded-2xl text-center text-xs text-[#A1A1AA]">
+                      No tasks published yet. Create your first task using the form.
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>

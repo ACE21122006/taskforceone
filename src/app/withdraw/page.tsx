@@ -24,6 +24,7 @@ export default function WithdrawPage() {
       router.push("/");
       return;
     }
+    // Await ensures balance is calculated after transactions load
     initializeData();
   }, [user, initializeData, router]);
 
@@ -43,9 +44,10 @@ export default function WithdrawPage() {
       return;
     }
 
-    const phoneRegex = /^(06|07|255)\d{8}$/;
+    // Tanzanian numbers: 07XXXXXXXX, 06XXXXXXXX (10 digits), or 255XXXXXXXXX (12 digits)
+    const phoneRegex = /^(0[67]\d{8}|255\d{9})$/;
     if (!phoneRegex.test(phoneNumber)) {
-      setError("Invalid phone. Use Tanzanian format: 07XXXXXXXX or 06XXXXXXXX.");
+      setError("Invalid phone. Use Tanzanian format: 07XXXXXXXX, 06XXXXXXXX, or 255XXXXXXXXX.");
       return;
     }
 

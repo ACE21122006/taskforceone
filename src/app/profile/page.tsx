@@ -40,6 +40,7 @@ export default function ProfilePage() {
         <div className="flex-1 flex justify-center items-center">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#124715]" />
         </div>
+        <BottomNav />
       </MobileContainer>
     );
   }
