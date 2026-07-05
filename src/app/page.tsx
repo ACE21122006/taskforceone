@@ -145,78 +145,91 @@ export default function SplashPage() {
 
   return (
     <MobileContainer showNav={false}>
-      <div className="flex-1 flex flex-col justify-between p-6 pt-16 pb-12 select-none">
-        {/* Top Header/Logo */}
-        <div className="flex flex-col items-center text-center mt-12">
-          {/* Minimalist Gaming Logo Icon */}
-          <div 
-            onClick={handleLogoClick}
-            className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl overflow-hidden flex items-center justify-center shadow-lg mb-6 cursor-pointer active:scale-95 transition-all select-none"
-          >
-            <img 
-              src="/logo.jpg" 
-              alt="Taskforce Zero Logo" 
-              className="h-full w-full object-cover object-[center_68%]" 
-            />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
-            Taskforce Zero
-          </h1>
-          <p className="text-[#A1A1AA] text-sm max-w-[280px]">
-            Tanzania&apos;s Delta Force gold farming workforce marketplace.
-          </p>
+      <div className="relative flex-1 flex flex-col justify-between p-6 pt-16 pb-12 select-none overflow-hidden">
+        {/* Background Image with Premium Dark Gradient Mask */}
+        <div className="absolute inset-0 z-0 select-none pointer-events-none">
+          <img 
+            src="/splash_bg.jpg" 
+            alt="Delta Force Mobile Background" 
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/40 via-[#0A0A0A]/85 to-[#0A0A0A]" />
         </div>
 
-        {/* Evaluation quick actions (highly professional and convenient) */}
-        {process.env.NODE_ENV !== "production" && (
-          <div className="bg-[#111111] border border-[#262626] rounded-2xl p-4 flex flex-col gap-3 my-6">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#A1A1AA] border-b border-[#262626] pb-2">
-              <Settings size={14} className="text-[#124715]" />
-              <span>EVALUATION / DEVELOPER QUICK LOGIN</span>
+        {/* Content Wrapper */}
+        <div className="relative z-10 flex-1 flex flex-col justify-between h-full">
+          {/* Top Header/Logo */}
+          <div className="flex flex-col items-center text-center mt-12">
+            {/* Minimalist Gaming Logo Icon */}
+            <div 
+              onClick={handleLogoClick}
+              className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl overflow-hidden flex items-center justify-center shadow-lg mb-6 cursor-pointer active:scale-95 transition-all select-none"
+            >
+              <img 
+                src="/logo.jpg" 
+                alt="Taskforce Zero Logo" 
+                className="h-full w-full object-cover object-[center_68%]" 
+              />
             </div>
-            <p className="text-[11px] text-[#A1A1AA]">
-              Click below to instantly log in and test both high-fidelity dashboards without SMS configuration:
+            <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+              Taskforce Zero
+            </h1>
+            <p className="text-[#A1A1AA] text-sm max-w-[280px]">
+              Tanzania&apos;s Delta Force gold farming workforce marketplace.
             </p>
-            <div className="grid grid-cols-2 gap-2.5">
-              <button
-                onClick={() => handleQuickLogin("gamer")}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#124715]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
-              >
-                <UserCheck size={14} className="text-[#124715]" />
-                <span>Gamer Portal</span>
-              </button>
-              <button
-                onClick={() => handleQuickLogin("admin")}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#EF4444]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
-              >
-                <ShieldCheck size={14} className="text-[#EF4444]" />
-                <span>Admin Console</span>
-              </button>
-            </div>
           </div>
-        )}
 
-        {/* Buttons / CTA */}
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={() => router.push("/login")}
-            className="w-full py-4 bg-[#124715] hover:bg-[#124715] active:scale-[0.99] text-white font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-sm shadow-[0_4px_20px_rgba(34,197,94,0.2)]"
-          >
-            <span>Sign In to Account</span>
-            <ArrowRight size={16} strokeWidth={2.5} />
-          </button>
-          
-          <button
-            onClick={() => router.push("/register")}
-            className="w-full py-4 bg-[#111111] hover:bg-[#181818] active:scale-[0.99] text-white border border-[#262626] hover:border-[#A1A1AA]/30 font-semibold rounded-2xl transition-all duration-200 cursor-pointer text-sm"
-          >
-            Create New Account
-          </button>
-          
-          <div className="text-center mt-3">
-            <p className="text-[11px] text-[#A1A1AA]">
-              Secure payments powered by M-Pesa, Airtel, & Yas.
-            </p>
+          {/* Evaluation quick actions (highly professional and convenient) */}
+          {process.env.NODE_ENV !== "production" && (
+            <div className="bg-[#111111] border border-[#262626] rounded-2xl p-4 flex flex-col gap-3 my-6">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#A1A1AA] border-b border-[#262626] pb-2">
+                <Settings size={14} className="text-[#124715]" />
+                <span>EVALUATION / DEVELOPER QUICK LOGIN</span>
+              </div>
+              <p className="text-[11px] text-[#A1A1AA]">
+                Click below to instantly log in and test both high-fidelity dashboards without SMS configuration:
+              </p>
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  onClick={() => handleQuickLogin("gamer")}
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#124715]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
+                >
+                  <UserCheck size={14} className="text-[#124715]" />
+                  <span>Gamer Portal</span>
+                </button>
+                <button
+                  onClick={() => handleQuickLogin("admin")}
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#EF4444]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
+                >
+                  <ShieldCheck size={14} className="text-[#EF4444]" />
+                  <span>Admin Console</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Buttons / CTA */}
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => router.push("/login")}
+              className="w-full py-4 bg-[#124715] hover:bg-[#124715] active:scale-[0.99] text-white font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-sm shadow-[0_4px_20px_rgba(34,197,94,0.2)]"
+            >
+              <span>Sign In to Account</span>
+              <ArrowRight size={16} strokeWidth={2.5} />
+            </button>
+            
+            <button
+              onClick={() => router.push("/register")}
+              className="w-full py-4 bg-[#111111] hover:bg-[#181818] active:scale-[0.99] text-white border border-[#262626] hover:border-[#A1A1AA]/30 font-semibold rounded-2xl transition-all duration-200 cursor-pointer text-sm"
+            >
+              Create New Account
+            </button>
+            
+            <div className="text-center mt-3">
+              <p className="text-[11px] text-[#A1A1AA]">
+                Secure payments powered by M-Pesa, Airtel, & Yas.
+              </p>
+            </div>
           </div>
         </div>
       </div>
