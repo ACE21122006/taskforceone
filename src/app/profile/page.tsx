@@ -9,8 +9,7 @@ import {
   ShieldCheck, 
   MessageSquare, 
   LogOut, 
-  ChevronRight, 
-  ShieldAlert
+  ChevronRight
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
@@ -18,7 +17,7 @@ import { BottomNav } from "@/components/bottom-nav";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, profile, logout, isMockMode, setMockMode } = useAppStore();
+  const { user, profile, logout } = useAppStore();
 
   useEffect(() => {
     if (!user) {
@@ -33,9 +32,7 @@ export default function ProfilePage() {
     router.push("/");
   };
 
-  const toggleMockModeState = () => {
-    setMockMode(!isMockMode);
-  };
+
 
   if (loading || !profile) {
     return (
@@ -118,29 +115,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Developer Sandbox Controls (very nice for demo) */}
-        <div className="p-4 bg-[#111111] border border-[#262626] rounded-2xl flex flex-col gap-3 mb-6">
-          <span className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider flex items-center gap-1">
-            <ShieldAlert size={12} className="text-[#124715]" />
-            <span>Developer Sandbox Options</span>
-          </span>
-          
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA]">Local Mock Mode (No costs)</span>
-            <button
-              onClick={toggleMockModeState}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-colors cursor-pointer ${
-                isMockMode 
-                  ? "bg-[#124715]/10 border-[#124715] text-[#124715]" 
-                  : "bg-red-500/10 border-red-500 text-red-500"
-              }`}
-            >
-              {isMockMode ? "Enabled" : "Disabled (Prod)"}
-            </button>
-          </div>
 
-
-        </div>
 
         {/* Menu Options */}
         <div className="flex flex-col gap-2 mb-6">
