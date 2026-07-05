@@ -425,6 +425,19 @@ export const useAppStore = create<AppState>()(
         }
         
         try {
+          // Verify active session with Supabase
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user && get().user?.id !== session.user.id) {
+            const { data: prof } = await supabase
+              .from("profiles")
+              .select("*")
+              .eq("id", session.user.id)
+              .maybeSingle();
+            if (prof) {
+              set({ user: { id: session.user.id, phone: session.user.phone }, profile: prof });
+            }
+          }
+
           // Fetch profiles
           const { data: profiles, error: pErr } = await supabase.from("profiles").select("*");
           if (pErr) throw pErr;

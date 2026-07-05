@@ -9,11 +9,21 @@ import { supabase } from "@/lib/supabase";
 
 export default function SplashPage() {
   const router = useRouter();
-  const { setAuth, initializeData, profiles } = useAppStore();
+  const { user, profile, setAuth, initializeData, profiles } = useAppStore();
 
   useEffect(() => {
     initializeData();
   }, [initializeData]);
+
+  useEffect(() => {
+    if (user && profile) {
+      if (profile.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
+    }
+  }, [user, profile, router]);
 
   const handleQuickLogin = async (role: "gamer" | "admin") => {
     // Perform a quick login for evaluation purposes
