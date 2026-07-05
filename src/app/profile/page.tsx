@@ -10,8 +10,7 @@ import {
   MessageSquare, 
   LogOut, 
   ChevronRight, 
-  ShieldAlert,
-  ArrowLeftRight
+  ShieldAlert
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
@@ -140,32 +139,7 @@ export default function ProfilePage() {
             </button>
           </div>
 
-          <button
-            onClick={() => {
-              if (profile.role === "admin") {
-                router.push("/admin");
-              } else {
-                // Switch role
-                const adminProfile = {
-                  id: "admin-1",
-                  username: "Taskforce_Zero_Manager",
-                  phone_number: "0788888888",
-                  role: "admin" as const,
-                  status: "active" as const,
-                  tasks_completed: 0,
-                  success_rate: 100,
-                  total_earnings: 0,
-                  created_at: new Date().toISOString()
-                };
-                useAppStore.setState({ profile: adminProfile, user: { id: adminProfile.id, phone: adminProfile.phone_number } });
-                router.push("/admin");
-              }
-            }}
-            className="w-full py-2.5 bg-[#262626] hover:bg-[#323232] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
-          >
-            <ArrowLeftRight size={14} className="text-[#124715]" />
-            <span>Switch to Admin Portal</span>
-          </button>
+
         </div>
 
         {/* Menu Options */}
