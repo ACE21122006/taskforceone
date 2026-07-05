@@ -102,6 +102,28 @@ interface SupabaseTransactionJoin {
   profiles: { username: string } | null;
 }
 
+export interface Message {
+  id: string;
+  user_id: string;
+  sender_role: "gamer" | "admin";
+  message: string;
+  screenshot_url?: string;
+  coins_sent?: number;
+  created_at: string;
+  username?: string;
+}
+
+interface SupabaseMessageJoin {
+  id: string;
+  user_id: string;
+  sender_role: "gamer" | "admin";
+  message: string;
+  screenshot_url?: string;
+  coins_sent?: number;
+  created_at: string;
+  profiles: { username: string } | null;
+}
+
 interface AppState {
   // Config
   isMockMode: boolean;
@@ -120,6 +142,7 @@ interface AppState {
   transactions: Transaction[];
   payoutMethods: PayoutMethod[];
   notifications: AppNotification[];
+  messages: Message[];
   
   // Fetching triggers
   initializeData: () => Promise<void>;
@@ -135,6 +158,8 @@ interface AppState {
   ) => Promise<void>;
   requestWithdrawal: (method: "mpesa" | "airtel_money" | "mixx_by_yas", phone: string, amount: number) => Promise<{ success: boolean; message: string }>;
   markNotificationRead: (id: string) => Promise<void>;
+  sendMessage: (message: string, screenshotUrl?: string, coinsSent?: number, targetUserId?: string) => Promise<void>;
+  distributeMoney: (userId: string, amount: number, description: string) => Promise<void>;
   
   // Admin actions
   createTask: (task: Omit<Task, "id" | "created_at" | "status">) => Promise<void>;
@@ -160,7 +185,7 @@ const initialMockProfiles: UserProfile[] = [
   },
   {
     id: "admin-1",
-    username: "DF_Earn_Manager",
+    username: "Taskforce_Zero_Manager",
     phone_number: "0788888888",
     role: "admin",
     status: "active",
@@ -275,6 +300,27 @@ const initialMockNotifications: AppNotification[] = [
   }
 ];
 
+const initialMockMessages: Message[] = [
+  {
+    id: "msg-1",
+    user_id: "gamer-1",
+    sender_role: "gamer",
+    message: "Hey admin, I've completed the Chemical Plant Raid and farmed 150,000 Delta Force Coins. I am transferring them to you now.",
+    screenshot_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=600",
+    coins_sent: 150000,
+    created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    username: "Juma_Fighter"
+  },
+  {
+    id: "msg-2",
+    user_id: "gamer-1",
+    sender_role: "admin",
+    message: "Got it, Juma! I verified the transaction on the in-game account. I have credited your wallet with 15,000 TZS.",
+    created_at: new Date(Date.now() - 23 * 60 * 60 * 1000).toISOString(),
+    username: "Taskforce_Zero_Manager"
+  }
+];
+
 export const useAppStore = create<AppState>((set, get) => ({
   isMockMode: true,
   setMockMode: (val) => set({ isMockMode: val }),
@@ -288,6 +334,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   transactions: initialMockTransactions,
   payoutMethods: [],
   notifications: initialMockNotifications,
+  messages: initialMockMessages,
   
   setAuth: (user, profile) => set({ user, profile }),
   
@@ -326,6 +373,11 @@ export const useAppStore = create<AppState>((set, get) => ({
       const { data: payoutMethods } = await supabase.from("payout_methods").select("*");
       // Fetch notifications
       const { data: notifications } = await supabase.from("notifications").select("*");
+      // Fetch messages
+      const { data: messages } = await supabase.from("messages").select(`
+        *,
+        profiles (username)
+      `);
       
       set({
         profiles: profiles || [],
@@ -341,7 +393,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           username: t.profiles?.username
         })),
         payoutMethods: payoutMethods || [],
-        notifications: notifications || []
+        notifications: notifications || [],
+        messages: (messages || []).map((m: SupabaseMessageJoin) => ({
+          ...m,
+          username: m.profiles?.username
+        }))
       });
     } catch (err) {
       console.error("Error initializing Supabase data:", err);
@@ -446,6 +502,115 @@ export const useAppStore = create<AppState>((set, get) => ({
       });
     } else {
       await supabase.from("notifications").update({ is_read: true }).eq("id", id);
+      await initializeData();
+    }
+  },
+  
+  sendMessage: async (messageText, screenshotUrl, coinsSent, targetUserId) => {
+    const { isMockMode, user, profile, messages, initializeData } = get();
+    if (!user) return;
+
+    const senderRole = profile?.role || "gamer";
+    const userId = senderRole === "admin" ? (targetUserId || "") : user.id;
+
+    if (isMockMode) {
+      const newMsg: Message = {
+        id: "msg-" + Math.random().toString(36).substring(2, 9),
+        user_id: userId,
+        sender_role: senderRole,
+        message: messageText,
+        screenshot_url: screenshotUrl,
+        coins_sent: coinsSent,
+        created_at: new Date().toISOString(),
+        username: profile?.username || "System"
+      };
+      
+      set({
+        messages: [...messages, newMsg]
+      });
+    } else {
+      const { error } = await supabase.from("messages").insert({
+        user_id: userId,
+        sender_role: senderRole,
+        message: messageText,
+        screenshot_url: screenshotUrl,
+        coins_sent: coinsSent
+      });
+      if (error) throw error;
+      await initializeData();
+    }
+  },
+
+  distributeMoney: async (userId, amount, description) => {
+    const { isMockMode, transactions, profiles, notifications, initializeData } = get();
+    
+    if (isMockMode) {
+      const newTx: Transaction = {
+        id: "tx-" + Math.random().toString(36).substring(2, 9),
+        user_id: userId,
+        amount_tzs: amount,
+        type: "adjustment",
+        description: description,
+        status: "completed",
+        created_at: new Date().toISOString(),
+        username: profiles.find(p => p.id === userId)?.username || "Gamer"
+      };
+
+      const updatedProfiles = profiles.map(p => {
+        if (p.id === userId) {
+          return {
+            ...p,
+            total_earnings: Number(p.total_earnings) + amount
+          };
+        }
+        return p;
+      });
+
+      const newNotif: AppNotification = {
+        id: "notif-" + Math.random().toString(36).substring(2, 9),
+        user_id: userId,
+        title: "Funds Distributed",
+        message: `Admin has credited your wallet with ${amount.toLocaleString()} TZS. Description: ${description}`,
+        is_read: false,
+        type: "withdrawal_approved",
+        created_at: new Date().toISOString()
+      };
+
+      const currentUserProfile = get().profile;
+      let newCurrentProfile = currentUserProfile;
+      if (currentUserProfile && currentUserProfile.id === userId) {
+        newCurrentProfile = updatedProfiles.find(p => p.id === currentUserProfile.id) || currentUserProfile;
+      }
+
+      set({
+        transactions: [newTx, ...transactions],
+        profiles: updatedProfiles,
+        notifications: [newNotif, ...notifications],
+        profile: newCurrentProfile
+      });
+    } else {
+      await supabase.from("transactions").insert({
+        user_id: userId,
+        amount_tzs: amount,
+        type: "adjustment",
+        description: description,
+        status: "completed"
+      });
+
+      const targetProfile = profiles.find(p => p.id === userId);
+      if (targetProfile) {
+        await supabase.from("profiles").update({
+          total_earnings: Number(targetProfile.total_earnings) + amount
+        }).eq("id", userId);
+      }
+
+      await supabase.from("notifications").insert({
+        user_id: userId,
+        title: "Funds Distributed",
+        message: `Admin has credited your wallet with ${amount.toLocaleString()} TZS. Description: ${description}`,
+        type: "withdrawal_approved"
+      });
+
       await initializeData();
     }
   },

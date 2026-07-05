@@ -128,3 +128,24 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- Messages table (direct chat comms for coin deposits)
+CREATE TABLE public.messages (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  sender_role TEXT NOT NULL CHECK (sender_role IN ('gamer', 'admin')),
+  message TEXT NOT NULL,
+  screenshot_url TEXT,
+  coins_sent INTEGER,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+
+-- Setup RLS Policies
+CREATE POLICY "Allow users to read own messages" ON public.messages
+  FOR SELECT USING (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+
+CREATE POLICY "Allow users to insert own messages" ON public.messages
+  FOR INSERT WITH CHECK (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');

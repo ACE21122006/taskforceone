@@ -13,9 +13,8 @@ export default function TaskDetailsPage() {
   const params = useParams();
   const taskId = params.id as string;
 
-  const { tasks, user, submissions, initializeData } = useAppStore();
+  const { tasks, user, initializeData } = useAppStore();
   const [loading, setLoading] = useState(true);
-  const [now] = useState(() => Date.now());
 
   useEffect(() => {
     if (!user) {
@@ -61,13 +60,6 @@ export default function TaskDetailsPage() {
     );
   }
 
-  const deadlineDate = new Date(task.deadline);
-  const timeDiff = deadlineDate.getTime() - now;
-  const daysRemaining = Math.max(0, Math.ceil(timeDiff / (1000 * 60 * 60 * 24)));
-
-  // Check if user has already submitted this task
-  const userSubmission = submissions.find(s => s.task_id === task.id && s.user_id === user?.id);
-
   return (
     <MobileContainer>
       <div className="flex-1 flex flex-col p-4 pb-28">
@@ -85,14 +77,14 @@ export default function TaskDetailsPage() {
           </div>
         </div>
 
-        {/* Task Title & Reward Card */}
+        {/* Task Title & Reference Value Card */}
         <div className="p-5 rounded-2xl bg-[#181818] border border-[#262626] flex flex-col gap-4 mb-5 relative overflow-hidden">
           <div className="flex justify-between items-start gap-3">
             <h3 className="text-base font-bold text-white leading-snug">
               {task.title}
             </h3>
-            <div className="text-xs font-bold text-[#22C55E] bg-[#22C55E]/10 px-3 py-1.5 rounded-xl shrink-0">
-              {task.reward_tzs.toLocaleString()} TZS
+            <div className="text-xs font-bold text-[#A1A1AA] bg-[#262626] px-3 py-1.5 rounded-xl shrink-0">
+              Ref: {task.reward_tzs.toLocaleString()} TZS
             </div>
           </div>
 
@@ -104,10 +96,6 @@ export default function TaskDetailsPage() {
             <span className="flex items-center gap-1.5 capitalize">
               <Briefcase size={14} className="text-[#A1A1AA]" />
               <span>{task.difficulty}</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ShieldAlert size={14} className="text-[#EF4444]" />
-              <span>{daysRemaining > 0 ? `${daysRemaining} days left` : "Expires today"}</span>
             </span>
           </div>
         </div>
@@ -150,36 +138,16 @@ export default function TaskDetailsPage() {
 
         {/* Bottom Action CTA */}
         <div className="mt-6">
-          {userSubmission ? (
-            <div className="p-4 bg-[#111111] border border-[#262626] rounded-2xl text-center flex flex-col gap-2">
-              <span className="text-xs text-[#A1A1AA]">
-                You have already submitted proof for this task.
-              </span>
-              <span className={`text-xs font-bold capitalize ${
-                userSubmission.status === "approved" 
-                  ? "text-[#22C55E]" 
-                  : userSubmission.status === "pending" 
-                    ? "text-[#F59E0B]" 
-                    : "text-[#EF4444]"
-              }`}>
-                Submission Status: {userSubmission.status}
-              </span>
-              <button
-                onClick={() => router.push("/tasks?tab=submissions")}
-                className="py-2.5 px-4 mt-2 bg-[#262626] hover:bg-[#323232] text-white text-xs font-semibold rounded-xl cursor-pointer"
-              >
-                Track Submission
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => router.push(`/tasks/${task.id}/submit`)}
-              className="w-full py-4 bg-[#22C55E] hover:bg-[#16A34A] text-[#0A0A0A] font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
-            >
-              <span>Accept & Submit Proof</span>
-              <ChevronRight size={16} strokeWidth={2.5} />
-            </button>
-          )}
+          <button
+            onClick={() => {
+              const message = `Hey admin, I've farmed coins for "${task.title}". I'm transferring them to you.`;
+              router.push(`/notifications?msg=${encodeURIComponent(message)}`);
+            }}
+            className="w-full py-4 bg-[#22C55E] hover:bg-[#16A34A] text-[#0A0A0A] font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
+          >
+            <span>Deposit Farmed Coins</span>
+            <ChevronRight size={16} strokeWidth={2.5} />
+          </button>
         </div>
       </div>
       <BottomNav />

@@ -18,7 +18,7 @@ export default function SplashPage() {
     // Perform a quick login for evaluation purposes
     const mockUser = profiles.find((p) => p.role === role) || {
       id: role === "admin" ? "admin-1" : "gamer-1",
-      username: role === "admin" ? "DF_Earn_Manager" : "Juma_Fighter",
+      username: role === "admin" ? "Taskforce_Zero_Manager" : "Juma_Fighter",
       phone_number: role === "admin" ? "0788888888" : "0712345678",
       role: role,
       status: "active",
@@ -44,10 +44,10 @@ export default function SplashPage() {
         <div className="flex flex-col items-center text-center mt-12">
           {/* Minimalist Gaming Logo Icon */}
           <div className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl flex items-center justify-center shadow-lg mb-6">
-            <span className="text-[#22C55E] text-2xl font-bold tracking-tight">DF</span>
+            <span className="text-[#22C55E] text-2xl font-bold tracking-tight">TFZ</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
-            DF Earn
+            Taskforce Zero
           </h1>
           <p className="text-[#A1A1AA] text-sm max-w-[280px]">
             Tanzania&apos;s Delta Force gold farming workforce marketplace.

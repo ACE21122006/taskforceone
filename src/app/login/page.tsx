@@ -71,7 +71,7 @@ export default function LoginPage() {
       } else {
         // Real Supabase Auth (Sign in with virtual email to bypass phone OTP)
         const { data, error: authErr } = await supabase.auth.signInWithPassword({
-          email: `${phoneNumber}@df-earn.com`,
+          email: `${phoneNumber}@taskforcezero.com`,
           password: password,
         });
 

@@ -14,7 +14,7 @@ import {
   X, 
   Search, 
   ArrowLeft, 
-  Play
+  MessageSquare
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 
@@ -24,18 +24,19 @@ export default function AdminDashboardPage() {
     user, 
     profile, 
     tasks, 
-    submissions, 
     transactions, 
     profiles,
+    messages,
     createTask, 
     deleteTask, 
-    reviewSubmission, 
     reviewWithdrawal, 
     toggleUserStatus,
+    sendMessage,
+    distributeMoney,
     initializeData 
   } = useAppStore();
 
-  const [activeTab, setActiveTab] = useState<"overview" | "tasks" | "submissions" | "withdrawals" | "users">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "tasks" | "comms" | "withdrawals" | "users">("overview");
   const [loading, setLoading] = useState(true);
 
   // Task creation states
@@ -49,11 +50,15 @@ export default function AdminDashboardPage() {
   const [taskEstTime, setTaskEstTime] = useState("");
   const [taskSuccess, setTaskSuccess] = useState(false);
 
-  // Submissions feedback states
-  const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
-
   // Search states
   const [userQuery, setUserQuery] = useState("");
+
+  // Comms and money distribution states
+  const [selectedGamerId, setSelectedGamerId] = useState<string | null>(null);
+  const [adminReplyText, setAdminReplyText] = useState("");
+  const [isDistributeModalOpen, setIsDistributeModalOpen] = useState(false);
+  const [distributeAmount, setDistributeAmount] = useState("");
+  const [distributeDescription, setDistributeDescription] = useState("");
 
   useEffect(() => {
     // Check admin authorization
@@ -72,20 +77,76 @@ export default function AdminDashboardPage() {
   const stats = useMemo(() => {
     const totalUsers = profiles.filter(p => p.role === "gamer").length;
     const activeUsers = profiles.filter(p => p.role === "gamer" && p.status === "active").length;
-    const pendingReviews = submissions.filter(s => s.status === "pending").length;
+    
+    // Number of unique gamer threads
+    const pendingReviews = Array.from(new Set(messages.map(m => m.user_id))).length;
+    
     const pendingWithdrawals = transactions.filter(t => t.type === "withdrawal" && t.status === "pending").length;
     
     const totalRewardsPaid = transactions
-      .filter(t => t.type === "reward" && t.status === "completed")
+      .filter(t => (t.type === "reward" || t.type === "adjustment") && t.status === "completed")
       .reduce((sum, t) => sum + Number(t.amount_tzs), 0);
 
     return { totalUsers, activeUsers, pendingReviews, pendingWithdrawals, totalRewardsPaid };
-  }, [profiles, submissions, transactions]);
+  }, [profiles, messages, transactions]);
 
-  // Pending Submissions
-  const pendingSubmissionsList = useMemo(() => {
-    return submissions.filter(s => s.status === "pending");
-  }, [submissions]);
+  // Group messages by user_id to find active threads
+  const activeThreads = useMemo(() => {
+    const uniqueUserIds = Array.from(new Set(messages.map(m => m.user_id)));
+    return uniqueUserIds.map(userId => {
+      const userProfile = profiles.find(p => p.id === userId);
+      const threadMessages = messages.filter(m => m.user_id === userId)
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      const lastMessage = threadMessages[0];
+      
+      return {
+        userId,
+        username: userProfile?.username || "Unknown Gamer",
+        phone: userProfile?.phone_number || "No Phone",
+        lastMessageText: lastMessage?.message || "",
+        lastMessageTime: lastMessage?.created_at || "",
+        hasScreenshot: !!lastMessage?.screenshot_url,
+        coinsSent: lastMessage?.coins_sent
+      };
+    }).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+  }, [messages, profiles]);
+
+  const selectedGamerMessages = useMemo(() => {
+    if (!selectedGamerId) return [];
+    return messages.filter(m => m.user_id === selectedGamerId)
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+  }, [messages, selectedGamerId]);
+
+  const handleSendAdminReply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedGamerId || !adminReplyText.trim()) return;
+    try {
+      await sendMessage(adminReplyText, undefined, undefined, selectedGamerId);
+      setAdminReplyText("");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send reply");
+    }
+  };
+
+  const handleDistributeMoney = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedGamerId || !distributeAmount || !distributeDescription) {
+      alert("Please fill in all fields");
+      return;
+    }
+    try {
+      await distributeMoney(selectedGamerId, Number(distributeAmount), distributeDescription);
+      setIsDistributeModalOpen(false);
+      setDistributeAmount("");
+      setDistributeDescription("");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to distribute money");
+    }
+  };
+
+
 
   // Pending Withdrawals
   const pendingWithdrawalsList = useMemo(() => {
@@ -138,27 +199,7 @@ export default function AdminDashboardPage() {
     }
   };
 
-  // Review Submission Handler
-  const handleReviewSubmission = async (id: string, status: "approved" | "rejected") => {
-    const feedback = feedbackMap[id] || "";
-    if (status === "rejected" && !feedback) {
-      alert("Please enter a feedback message detailing the reason for rejection.");
-      return;
-    }
 
-    try {
-      await reviewSubmission(id, status, feedback);
-      // Clear feedback
-      setFeedbackMap(prev => {
-        const copy = { ...prev };
-        delete copy[id];
-        return copy;
-      });
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update submission.");
-    }
-  };
 
   // Review Withdrawal Handler
   const handleReviewWithdrawal = async (id: string, status: "completed" | "rejected") => {
@@ -194,10 +235,10 @@ export default function AdminDashboardPage() {
       <header className="bg-[#111111] border-b border-[#262626] px-8 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 bg-[#181818] border border-[#262626] rounded-xl flex items-center justify-center font-bold text-red-500">
-            DF
+            TFZ
           </div>
           <div>
-            <h1 className="text-sm font-bold tracking-tight">DF Earn Admin</h1>
+            <h1 className="text-sm font-bold tracking-tight">Taskforce Zero Admin</h1>
             <span className="text-[10px] text-[#A1A1AA] uppercase tracking-wider font-semibold">
               Workforce Control Panel
             </span>
@@ -237,7 +278,7 @@ export default function AdminDashboardPage() {
           {[
             { id: "overview", label: "Dashboard Summary", icon: Layers },
             { id: "tasks", label: "Delta Force Tasks", icon: Plus },
-            { id: "submissions", label: "Review Proofs", icon: FileCheck, badge: stats.pendingReviews },
+            { id: "comms", label: "Gamer Comms / Deposits", icon: MessageSquare, badge: activeThreads.length },
             { id: "withdrawals", label: "Review Withdrawals", icon: ArrowDownToLine, badge: stats.pendingWithdrawals },
             { id: "users", label: "Gamers Database", icon: Users }
           ].map((item) => {
@@ -246,7 +287,7 @@ export default function AdminDashboardPage() {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id as "overview" | "tasks" | "submissions" | "withdrawals" | "users")}
+                onClick={() => setActiveTab(item.id as "overview" | "tasks" | "comms" | "withdrawals" | "users")}
                 className={`w-full py-3 px-4 rounded-xl flex justify-between items-center font-semibold text-xs transition-colors cursor-pointer text-left ${
                   isActive 
                     ? "bg-[#22C55E]/15 text-[#22C55E] border border-[#22C55E]/20" 
@@ -453,106 +494,229 @@ export default function AdminDashboardPage() {
             </div>
           )}
 
-          {/* TAB 3: SUBMISSION REVIEW */}
-          {activeTab === "submissions" && (
-            <div className="flex flex-col gap-6">
-              <h2 className="text-xl font-bold">Pending Task Evidence Reviews</h2>
-              
-              {pendingSubmissionsList.length > 0 ? (
-                <div className="grid grid-cols-2 gap-6">
-                  {pendingSubmissionsList.map((sub) => (
-                    <div key={sub.id} className="p-5 rounded-2xl bg-[#181818] border border-[#262626] flex flex-col gap-4">
-                      {/* Gamer detail */}
-                      <div className="flex justify-between items-start">
-                        <div className="flex flex-col">
-                          <span className="text-xs font-bold text-white">{sub.task_title || "Farming Job"}</span>
-                          <span className="text-[10px] text-[#A1A1AA] mt-0.5">
-                            Gamer: {sub.username || "Unknown"} ({sub.phone_number})
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-[#22C55E]">
-                          {sub.coins_earned.toLocaleString()} Coins
+          {/* TAB 3: GAMER COMMS CENTER */}
+          {activeTab === "comms" && (
+            <div className="h-[calc(100vh-140px)] flex border border-[#262626] rounded-2xl overflow-hidden bg-[#111111]">
+              {/* Left Column: Thread list */}
+              <div className="w-80 border-r border-[#262626] flex flex-col bg-[#111111] shrink-0">
+                <div className="p-4 border-b border-[#262626]">
+                  <h3 className="text-sm font-bold text-white">Active Gamer Threads</h3>
+                  <p className="text-[10px] text-[#A1A1AA] mt-0.5">Select a gamer to view coin proofs and chat.</p>
+                </div>
+                <div className="flex-1 overflow-y-auto divide-y divide-[#262626]/60 scrollbar-none">
+                  {activeThreads.length > 0 ? (
+                    activeThreads.map((thread) => {
+                      const isSelected = selectedGamerId === thread.userId;
+                      return (
+                        <button
+                          key={thread.userId}
+                          onClick={() => setSelectedGamerId(thread.userId)}
+                          className={`w-full p-4 flex flex-col gap-1.5 transition-colors text-left cursor-pointer ${
+                            isSelected ? "bg-[#22C55E]/10" : "hover:bg-[#181818]"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-bold text-white">{thread.username}</span>
+                            <span className="text-[9px] text-[#A1A1AA]">
+                              {thread.lastMessageTime ? new Date(thread.lastMessageTime).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                              }) : ""}
+                            </span>
+                          </div>
+                          <span className="text-[9px] text-[#A1A1AA] font-mono">{thread.phone}</span>
+                          
+                          {/* Last message preview */}
+                          <div className="flex items-center gap-1.5 mt-1">
+                            {thread.coinsSent && (
+                              <span className="bg-yellow-500/15 text-yellow-500 text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5 shrink-0">
+                                <Coins size={8} />
+                                <span>{thread.coinsSent.toLocaleString()}</span>
+                              </span>
+                            )}
+                            {thread.hasScreenshot && (
+                              <span className="bg-blue-500/15 text-blue-400 text-[8px] font-bold px-1.5 py-0.5 rounded shrink-0">
+                                Photo Proof
+                              </span>
+                            )}
+                            <p className="text-[10px] text-[#A1A1AA] truncate flex-1">
+                              {thread.lastMessageText}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="p-8 text-center text-xs text-[#A1A1AA]">
+                      No chat threads found.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Chat body */}
+              <div className="flex-1 flex flex-col bg-[#0A0A0A]">
+                {selectedGamerId ? (
+                  <>
+                    {/* Selected Gamer Header */}
+                    <div className="p-4 bg-[#111111] border-b border-[#262626] flex justify-between items-center">
+                      <div>
+                        <h3 className="text-xs font-bold text-white">
+                          {profiles.find(p => p.id === selectedGamerId)?.username || "Unknown Gamer"}
+                        </h3>
+                        <span className="text-[10px] text-[#A1A1AA] font-mono">
+                          Phone: {profiles.find(p => p.id === selectedGamerId)?.phone_number || "No Phone"}
                         </span>
                       </div>
 
-                      {/* Evidence Screenshot */}
-                      {sub.screenshot_url && (
-                        <div className="rounded-xl border border-[#262626] overflow-hidden bg-[#111111] h-44 relative group">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img 
-                            src={sub.screenshot_url} 
-                            alt="Evidence proof" 
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-2 right-2 bg-black/75 px-2 py-1 rounded text-[9px] font-bold text-white border border-[#262626]">
-                            Screenshot Evidence
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Video proof link */}
-                      {sub.video_url && (
-                        <div className="p-3 bg-[#111111] border border-[#262626] rounded-xl flex items-center justify-between text-xs">
-                          <span className="text-[#A1A1AA]">Video Clip Uploaded</span>
-                          <a 
-                            href={sub.video_url} 
-                            target="_blank" 
-                            rel="noreferrer" 
-                            className="text-[#22C55E] hover:underline flex items-center gap-1 font-bold"
-                          >
-                            <Play size={12} />
-                            <span>Watch Clip</span>
-                          </a>
-                        </div>
-                      )}
-
-                      {/* Notes */}
-                      {sub.notes && (
-                        <div className="p-3 bg-[#111111] border border-[#262626] rounded-xl text-[11px] text-[#A1A1AA] leading-relaxed">
-                          <span className="font-bold text-white block mb-1">Gamer Notes:</span>
-                          {sub.notes}
-                        </div>
-                      )}
-
-                      {/* Feedback input */}
-                      <div className="flex flex-col gap-1.5 mt-2">
-                        <label className="text-[9px] font-bold text-[#A1A1AA] uppercase tracking-wider">
-                          Reviewer Feedback (Required for rejection)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Screen shows wrong username"
-                          value={feedbackMap[sub.id] || ""}
-                          onChange={(e) => setFeedbackMap(prev => ({ ...prev, [sub.id]: e.target.value }))}
-                          className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs"
-                        />
-                      </div>
-
-                      {/* Action buttons */}
-                      <div className="grid grid-cols-2 gap-3 mt-1 pt-3 border-t border-[#262626]/50">
-                        <button
-                          onClick={() => handleReviewSubmission(sub.id, "rejected")}
-                          className="py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
-                        >
-                          <X size={14} />
-                          <span>Reject Evidence</span>
-                        </button>
-                        <button
-                          onClick={() => handleReviewSubmission(sub.id, "approved")}
-                          className="py-2.5 bg-[#22C55E]/10 hover:bg-[#22C55E]/20 text-[#22C55E] rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
-                        >
-                          <Check size={14} />
-                          <span>Approve & Pay</span>
-                        </button>
-                      </div>
+                      {/* Pay Gamer Button */}
+                      <button
+                        onClick={() => {
+                          setIsDistributeModalOpen(true);
+                          setDistributeDescription(`Coin farming payout for ${profiles.find(p => p.id === selectedGamerId)?.username}`);
+                        }}
+                        className="py-2 px-4 bg-[#22C55E] hover:bg-[#16A34A] text-black text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors shadow-md animate-pulse"
+                      >
+                        <Coins size={14} />
+                        <span>Distribute TZS Money</span>
+                      </button>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="p-8 bg-[#181818] border border-[#262626] border-dashed rounded-2xl text-center text-xs text-[#A1A1AA] max-w-md">
-                  No pending task submissions to review.
-                </div>
-              )}
+
+                    {/* Chat Messages */}
+                    <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 max-h-[calc(100vh-280px)] scrollbar-none">
+                      {selectedGamerMessages.map((msg) => {
+                        const isAdmin = msg.sender_role === "admin";
+                        return (
+                          <div
+                            key={msg.id}
+                            className={`flex flex-col max-w-[75%] ${
+                              isAdmin ? "self-end items-end" : "self-start items-start"
+                            }`}
+                          >
+                            <div className="flex items-center gap-1.5 mb-1 px-1">
+                              <span className="text-[9px] text-[#A1A1AA] font-bold">
+                                {isAdmin ? "You (Admin)" : msg.username || "Gamer"}
+                              </span>
+                              <span className="text-[8px] text-[#52525B]">
+                                {new Date(msg.created_at).toLocaleTimeString("en-US", {
+                                  hour: "2-digit",
+                                  minute: "2-digit"
+                                })}
+                              </span>
+                            </div>
+
+                            <div
+                              className={`p-3.5 rounded-2xl border text-xs leading-relaxed flex flex-col gap-2 ${
+                                isAdmin
+                                  ? "bg-[#22C55E]/15 border-[#22C55E]/30 text-white rounded-tr-none"
+                                  : "bg-[#18181B] border-[#262626] text-white rounded-tl-none"
+                              }`}
+                            >
+                              {msg.coins_sent && (
+                                <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-bold px-2 py-1 rounded-xl text-[9px] w-fit">
+                                  <Coins size={11} />
+                                  <span>{msg.coins_sent.toLocaleString()} Coins Sent</span>
+                                </div>
+                              )}
+
+                              {msg.screenshot_url && (
+                                <div className="relative rounded-xl overflow-hidden border border-white/10 max-w-[280px] shadow-md mt-0.5">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={msg.screenshot_url}
+                                    alt="Farming Proof"
+                                    className="w-full h-auto object-cover max-h-[180px]"
+                                  />
+                                </div>
+                              )}
+
+                              {msg.message && <p className="font-medium">{msg.message}</p>}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Reply Input Form */}
+                    <form onSubmit={handleSendAdminReply} className="p-4 bg-[#111111] border-t border-[#262626] flex gap-3">
+                      <input
+                        type="text"
+                        value={adminReplyText}
+                        onChange={(e) => setAdminReplyText(e.target.value)}
+                        placeholder="Type reply to gamer..."
+                        className="flex-1 bg-[#18181B] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl py-3 px-4 text-xs font-semibold placeholder:text-[#52525B]"
+                      />
+                      <button
+                        type="submit"
+                        className="py-3 px-6 bg-[#22C55E] hover:bg-[#16A34A] text-black text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-md flex items-center gap-1.5"
+                      >
+                        <span>Send Reply</span>
+                      </button>
+                    </form>
+                  </>
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 p-8">
+                    <MessageSquare size={36} className="text-[#262626]" />
+                    <span className="text-sm font-bold text-[#52525B]">No Active Thread Selected</span>
+                    <p className="text-xs text-[#52525B] max-w-[240px]">
+                      Select a gamer chat from the left sidebar to view details, verify coin proofs, and distribute funds.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Distribute Money Modal/Popup */}
+          {isDistributeModalOpen && selectedGamerId && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-[#181818] border border-[#262626] rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+                <button
+                  onClick={() => setIsDistributeModalOpen(false)}
+                  className="absolute top-4 right-4 text-[#A1A1AA] hover:text-white cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+                
+                <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
+                  <Coins className="text-[#22C55E]" size={18} />
+                  <span>Distribute Money (TZS)</span>
+                </h3>
+                <p className="text-[11px] text-[#A1A1AA] mb-4">
+                  Pay player <strong>{profiles.find(p => p.id === selectedGamerId)?.username}</strong> directly into their available wallet balance.
+                </p>
+
+                <form onSubmit={handleDistributeMoney} className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider">TZS Amount</label>
+                    <input
+                      type="number"
+                      value={distributeAmount}
+                      onChange={(e) => setDistributeAmount(e.target.value)}
+                      placeholder="e.g. 15000"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-semibold text-white"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider">Payment Description</label>
+                    <input
+                      type="text"
+                      value={distributeDescription}
+                      onChange={(e) => setDistributeDescription(e.target.value)}
+                      placeholder="e.g. Completed Valley Run 100k coins payout"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium text-white"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3 mt-2 bg-[#22C55E] hover:bg-[#16A34A] text-black font-bold rounded-xl text-xs cursor-pointer transition-colors shadow-md"
+                  >
+                    Confirm & Credit Wallet
+                  </button>
+                </form>
+              </div>
             </div>
           )}
 
@@ -655,7 +819,17 @@ export default function AdminDashboardPage() {
                           <td className="p-4 text-white font-medium">{userProfile.tasks_completed}</td>
                           <td className="p-4 text-[#22C55E] font-bold">{userProfile.success_rate}%</td>
                           <td className="p-4 text-white font-bold">{userProfile.total_earnings.toLocaleString()} TZS</td>
-                          <td className="p-4 text-right">
+                          <td className="p-4 text-right flex justify-end gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedGamerId(userProfile.id);
+                                setIsDistributeModalOpen(true);
+                                setDistributeDescription(`Manual wallet distribution for ${userProfile.username}`);
+                              }}
+                              className="py-1.5 px-3 bg-[#22C55E]/10 hover:bg-[#22C55E]/20 text-[#22C55E] border border-[#22C55E]/25 rounded-lg text-[10px] font-bold cursor-pointer transition-all"
+                            >
+                              Pay Gamer
+                            </button>
                             <button
                               onClick={() => handleToggleUser(userProfile.id)}
                               className={`py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${

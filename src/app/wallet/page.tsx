@@ -72,7 +72,7 @@ export default function WalletPage() {
             <ArrowLeft size={16} />
           </button>
           <div>
-            <span className="text-[10px] text-[#A1A1AA] uppercase tracking-wider font-bold">DF Earn Finance</span>
+            <span className="text-[10px] text-[#A1A1AA] uppercase tracking-wider font-bold">Taskforce Zero Finance</span>
             <h2 className="text-sm font-bold text-white leading-tight">My Wallet</h2>
           </div>
         </div>

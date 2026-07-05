@@ -76,7 +76,7 @@ export default function RegisterPage() {
       } else {
         // Real Supabase Auth Signup (using virtual email to bypass phone OTP)
         const { data, error: signUpErr } = await supabase.auth.signUp({
-          email: `${phoneNumber}@df-earn.com`,
+          email: `${phoneNumber}@taskforcezero.com`,
           password: password,
           options: {
             data: {

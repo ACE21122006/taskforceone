@@ -83,7 +83,7 @@ export default function ProfilePage() {
             <ArrowLeft size={16} />
           </button>
           <div>
-            <span className="text-[10px] text-[#A1A1AA] uppercase tracking-wider font-bold">DF Earn Network</span>
+            <span className="text-[10px] text-[#A1A1AA] uppercase tracking-wider font-bold">Taskforce Zero Network</span>
             <h2 className="text-sm font-bold text-white leading-tight">My Profile</h2>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function ProfilePage() {
                 // Switch role
                 const adminProfile = {
                   id: "admin-1",
-                  username: "DF_Earn_Manager",
+                  username: "Taskforce_Zero_Manager",
                   phone_number: "0788888888",
                   role: "admin" as const,
                   status: "active" as const,

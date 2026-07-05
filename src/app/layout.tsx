@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "DF Earn | Tanzanian Gamers Workforce & Earnings",
+  title: "Taskforce Zero | Tanzanian Gamers Workforce & Earnings",
   description: "Complete Delta Force coin farming tasks, earn real rewards, and withdraw instantly through M-Pesa, Airtel Money, or Mixx by Yas.",
 };
 
