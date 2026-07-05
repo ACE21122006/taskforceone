@@ -81,33 +81,44 @@ ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.payout_methods ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
+-- Helper function to check if the current user is an admin without RLS recursion
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Setup RLS Policies (Allow users to read their own, admins to read all)
 CREATE POLICY "Allow users to read own profile" ON public.profiles
-  FOR SELECT USING (auth.uid() = id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR SELECT USING (auth.uid() = id OR public.is_admin());
 
 CREATE POLICY "Allow users to update own profile" ON public.profiles
-  FOR UPDATE USING (auth.uid() = id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR UPDATE USING (auth.uid() = id OR public.is_admin());
 
 CREATE POLICY "Allow anyone to read published tasks" ON public.tasks
-  FOR SELECT USING (status = 'published' OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR SELECT USING (status = 'published' OR public.is_admin());
 
 CREATE POLICY "Allow admins full control of tasks" ON public.tasks
-  FOR ALL USING ((SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR ALL USING (public.is_admin());
 
 CREATE POLICY "Allow users to manage own submissions" ON public.submissions
-  FOR ALL USING (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR ALL USING (auth.uid() = user_id OR public.is_admin());
 
 CREATE POLICY "Allow users to read own transactions" ON public.transactions
-  FOR SELECT USING (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.is_admin());
 
 CREATE POLICY "Allow admins full control of transactions" ON public.transactions
-  FOR ALL USING ((SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR ALL USING (public.is_admin());
 
 CREATE POLICY "Allow users to manage own payout methods" ON public.payout_methods
-  FOR ALL USING (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR ALL USING (auth.uid() = user_id OR public.is_admin());
 
 CREATE POLICY "Allow users to manage own notifications" ON public.notifications
-  FOR ALL USING (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR ALL USING (auth.uid() = user_id OR public.is_admin());
 
 -- Trigger to insert profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -145,7 +156,7 @@ ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
 -- Setup RLS Policies
 CREATE POLICY "Allow users to read own messages" ON public.messages
-  FOR SELECT USING (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.is_admin());
 
 CREATE POLICY "Allow users to insert own messages" ON public.messages
-  FOR INSERT WITH CHECK (auth.uid() = user_id OR (SELECT p.role FROM public.profiles p WHERE p.id = auth.uid()) = 'admin');
+  FOR INSERT WITH CHECK (auth.uid() = user_id OR public.is_admin());
