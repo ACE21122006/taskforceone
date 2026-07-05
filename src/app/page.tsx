@@ -151,9 +151,13 @@ export default function SplashPage() {
           {/* Minimalist Gaming Logo Icon */}
           <div 
             onClick={handleLogoClick}
-            className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl flex items-center justify-center shadow-lg mb-6 cursor-pointer active:scale-95 transition-all select-none"
+            className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl overflow-hidden flex items-center justify-center shadow-lg mb-6 cursor-pointer active:scale-95 transition-all select-none"
           >
-            <span className="text-[#124715] text-2xl font-bold tracking-tight">TFZ</span>
+            <img 
+              src="/logo.jpg" 
+              alt="Taskforce Zero Logo" 
+              className="h-full w-full object-cover object-[center_68%]" 
+            />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
             Taskforce Zero

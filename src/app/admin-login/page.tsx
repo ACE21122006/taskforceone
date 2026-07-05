@@ -141,8 +141,12 @@ export default function AdminLoginPage() {
 
           {/* Title */}
           <div className="flex flex-col items-center text-center mt-6 mb-8">
-            <div className="h-14 w-14 bg-[#111111] border border-[#262626] rounded-2xl flex items-center justify-center shadow-lg mb-4">
-              <KeyRound size={24} className="text-[#124715]" />
+            <div className="h-14 w-14 bg-[#111111] border border-[#262626] rounded-2xl overflow-hidden flex items-center justify-center shadow-lg mb-4">
+              <img 
+                src="/logo.jpg" 
+                alt="Logo" 
+                className="h-full w-full object-cover object-[center_68%]" 
+              />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-white mb-1">
               Secret Console Login

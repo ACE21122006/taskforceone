@@ -234,8 +234,12 @@ export default function AdminDashboardPage() {
       {/* Top Navbar */}
       <header className="bg-[#111111] border-b border-[#262626] px-8 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-[#181818] border border-[#262626] rounded-xl flex items-center justify-center font-bold text-red-500">
-            TFZ
+          <div className="h-10 w-10 bg-[#181818] border border-[#262626] rounded-xl overflow-hidden flex items-center justify-center font-bold">
+            <img 
+              src="/logo.jpg" 
+              alt="TFZ Logo" 
+              className="h-full w-full object-cover object-[center_68%]" 
+            />
           </div>
           <div>
             <h1 className="text-sm font-bold tracking-tight">Taskforce Zero Admin</h1>
