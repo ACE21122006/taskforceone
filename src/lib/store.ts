@@ -463,7 +463,7 @@ export const useAppStore = create<AppState>()(
                 est_completion_time: task.est_completion_time
               });
               if (seedErr) {
-                console.error("Error seeding task:", task.title, seedErr);
+                console.warn("Skipping client task seeding (requires admin permissions):", seedErr.message);
               }
             }
             const { data: reTasks, error: reTasksErr } = await supabase.from("tasks").select("*");
