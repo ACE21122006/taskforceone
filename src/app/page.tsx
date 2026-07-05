@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShieldCheck, ArrowRight, UserCheck, Settings } from "lucide-react";
 import { useAppStore } from "@/lib/store";
@@ -10,6 +10,23 @@ import { supabase } from "@/lib/supabase";
 export default function SplashPage() {
   const router = useRouter();
   const { user, profile, setAuth, initializeData, profiles } = useAppStore();
+
+  const [logoClicks, setLogoClicks] = useState(0);
+  const [showSecretModal, setShowSecretModal] = useState(false);
+  const [secretUser, setSecretUser] = useState("");
+  const [secretPass, setSecretPass] = useState("");
+  const [secretError, setSecretError] = useState("");
+
+  const handleLogoClick = () => {
+    setLogoClicks((prev) => {
+      const next = prev + 1;
+      if (next >= 5) {
+        setShowSecretModal(true);
+        return 0;
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     initializeData();
@@ -132,7 +149,10 @@ export default function SplashPage() {
         {/* Top Header/Logo */}
         <div className="flex flex-col items-center text-center mt-12">
           {/* Minimalist Gaming Logo Icon */}
-          <div className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl flex items-center justify-center shadow-lg mb-6">
+          <div 
+            onClick={handleLogoClick}
+            className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl flex items-center justify-center shadow-lg mb-6 cursor-pointer active:scale-95 transition-all select-none"
+          >
             <span className="text-[#124715] text-2xl font-bold tracking-tight">TFZ</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
@@ -196,6 +216,72 @@ export default function SplashPage() {
           </div>
         </div>
       </div>
+
+      {showSecretModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-xs bg-[#111111] border border-[#262626] rounded-2xl p-5 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="text-center">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">Secret Console</h3>
+              <p className="text-[10px] text-[#A1A1AA] mt-1">Enter credentials to unlock access</p>
+            </div>
+            
+            {secretError && (
+              <div className="text-[10px] text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl text-center font-medium">
+                {secretError}
+              </div>
+            )}
+            
+            <div className="flex flex-col gap-3">
+              <input
+                type="text"
+                placeholder="Username"
+                value={secretUser}
+                onChange={(e) => setSecretUser(e.target.value)}
+                className="w-full bg-[#18181B] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl py-2.5 px-3 text-xs text-white"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={secretPass}
+                onChange={(e) => setSecretPass(e.target.value)}
+                className="w-full bg-[#18181B] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl py-2.5 px-3 text-xs text-white"
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSecretModal(false);
+                  setSecretUser("");
+                  setSecretPass("");
+                  setSecretError("");
+                }}
+                className="py-2.5 bg-[#181818] hover:bg-[#262626] text-white text-xs font-semibold rounded-xl cursor-pointer transition-colors border border-[#262626]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  if (secretUser === "admin" && secretPass === "taskforcezero@2026") {
+                    setShowSecretModal(false);
+                    setSecretUser("");
+                    setSecretPass("");
+                    setSecretError("");
+                    await handleQuickLogin("admin");
+                  } else {
+                    setSecretError("Invalid credentials");
+                  }
+                }}
+                className="py-2.5 bg-[#124715] hover:opacity-90 text-white text-xs font-semibold rounded-xl cursor-pointer transition-colors"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </MobileContainer>
   );
 }
