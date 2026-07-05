@@ -20,7 +20,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-50% translate-x-[-50%] w-full max-w-[430px] bg-[#111111] border-t border-[#262626] py-3 px-6 flex justify-between items-center z-50 rounded-t-2xl safe-bottom shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#111111] border-t border-[#262626] py-3 px-6 flex justify-between items-center z-50 rounded-t-2xl safe-bottom shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.path || (item.path !== "/dashboard" && pathname.startsWith(item.path));

@@ -57,7 +57,7 @@ CREATE TABLE public.transactions (
 CREATE TABLE public.payout_methods (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  method TEXT NOT NULL CHECK (method IN ('mpesa', 'airtel_money', 'mixx_by_yas')),
+  method TEXT NOT NULL CHECK (method IN ('mpesa', 'airtel_money', 'mixx_by_yas', 'halo_pesa')),
   phone_number TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

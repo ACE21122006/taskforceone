@@ -11,7 +11,7 @@ export default function WithdrawPage() {
   const router = useRouter();
   const { user, profile, transactions, requestWithdrawal, initializeData } = useAppStore();
 
-  const [method, setMethod] = useState<"mpesa" | "airtel_money" | "mixx_by_yas">("mpesa");
+  const [method, setMethod] = useState<"mpesa" | "airtel_money" | "mixx_by_yas" | "halo_pesa">("mpesa");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [amount, setAmount] = useState("");
   
@@ -131,16 +131,17 @@ export default function WithdrawPage() {
               <label className="text-[11px] font-bold tracking-wider text-[#A1A1AA] uppercase">
                 Choose Mobile Money Provider
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {[
                   { id: "mpesa", label: "M-Pesa" },
-                  { id: "airtel_money", label: "Airtel" },
-                  { id: "mixx_by_yas", label: "Mixx (Yas)" }
+                  { id: "airtel_money", label: "Airtel Money" },
+                  { id: "mixx_by_yas", label: "Mixx by Yas" },
+                  { id: "halo_pesa", label: "Halo Pesa" }
                 ].map((prov) => (
                   <button
                     key={prov.id}
                     type="button"
-                    onClick={() => setMethod(prov.id as "mpesa" | "airtel_money" | "mixx_by_yas")}
+                    onClick={() => setMethod(prov.id as "mpesa" | "airtel_money" | "mixx_by_yas" | "halo_pesa")}
                     className={`py-3 px-2 text-center text-xs font-bold rounded-xl cursor-pointer border transition-colors ${
                       method === prov.id 
                         ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]" 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ShieldCheck, ArrowRight, UserCheck, Settings } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
+import { supabase } from "@/lib/supabase";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -14,26 +15,104 @@ export default function SplashPage() {
     initializeData();
   }, [initializeData]);
 
-  const handleQuickLogin = (role: "gamer" | "admin") => {
+  const handleQuickLogin = async (role: "gamer" | "admin") => {
     // Perform a quick login for evaluation purposes
-    const mockUser = profiles.find((p) => p.role === role) || {
-      id: role === "admin" ? "admin-1" : "gamer-1",
-      username: role === "admin" ? "Taskforce_Zero_Manager" : "Juma_Fighter",
-      phone_number: role === "admin" ? "0788888888" : "0712345678",
-      role: role,
-      status: "active",
-      tasks_completed: role === "admin" ? 0 : 18,
-      success_rate: 94.4,
-      total_earnings: role === "admin" ? 0 : 135000,
-      created_at: new Date().toISOString()
-    };
-    
-    setAuth({ id: mockUser.id, phone: mockUser.phone_number }, mockUser);
-    
-    if (role === "admin") {
-      router.push("/admin");
-    } else {
-      router.push("/dashboard");
+    const isMock = useAppStore.getState().isMockMode;
+    const phone = role === "admin" ? "0788888888" : "0712345678";
+    const username = role === "admin" ? "Taskforce_Zero_Manager" : "Juma_Fighter";
+    const email = `${phone}@taskforcezero.com`;
+    const password = "password123";
+
+    if (isMock) {
+      const mockUser = profiles.find((p) => p.role === role) || {
+        id: role === "admin" ? "admin-1" : "gamer-1",
+        username: username,
+        phone_number: phone,
+        role: role,
+        status: "active",
+        tasks_completed: role === "admin" ? 0 : 18,
+        success_rate: 94.4,
+        total_earnings: role === "admin" ? 0 : 135000,
+        created_at: new Date().toISOString()
+      };
+      
+      setAuth({ id: mockUser.id, phone: mockUser.phone_number }, mockUser);
+      router.push(role === "admin" ? "/admin" : "/dashboard");
+      return;
+    }
+
+    try {
+      // Real Supabase Mode
+      let authUser = null;
+
+      // 1. Try to sign in
+      const { data: signInData, error: signInErr } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInErr && (signInErr.message.includes("Invalid login credentials") || signInErr.message.includes("Email not confirmed"))) {
+        console.log("Mock user not found in Supabase Auth, creating now...");
+        const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              username: username,
+              phone_number: phone,
+              role: role,
+            },
+          },
+        });
+
+        if (signUpErr) throw signUpErr;
+        authUser = signUpData.user;
+      } else if (signInErr) {
+        throw signInErr;
+      } else {
+        authUser = signInData.user;
+      }
+
+      if (authUser) {
+        // Fetch or wait for profile trigger
+        let profileData = null;
+        let attempts = 0;
+        while (!profileData && attempts < 5) {
+          const { data: prof } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", authUser.id)
+            .maybeSingle();
+          if (prof) {
+            profileData = prof;
+            break;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          attempts++;
+        }
+
+        // Fallback profile if trigger takes too long
+        if (!profileData) {
+          profileData = {
+            id: authUser.id,
+            username: username,
+            phone_number: phone,
+            role: role,
+            status: "active",
+            tasks_completed: role === "admin" ? 0 : 18,
+            success_rate: 94.4,
+            total_earnings: role === "admin" ? 0 : 135000,
+            created_at: new Date().toISOString()
+          };
+        }
+
+        setAuth({ id: authUser.id, phone: phone }, profileData);
+        await initializeData();
+        router.push(role === "admin" ? "/admin" : "/dashboard");
+      }
+    } catch (err) {
+      console.error("Quick Login failed:", err);
+      alert("Quick Login failed: " + (err instanceof Error ? err.message : String(err)));
     }
   };
 
@@ -55,31 +134,33 @@ export default function SplashPage() {
         </div>
 
         {/* Evaluation quick actions (highly professional and convenient) */}
-        <div className="bg-[#111111] border border-[#262626] rounded-2xl p-4 flex flex-col gap-3 my-6">
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#A1A1AA] border-b border-[#262626] pb-2">
-            <Settings size={14} className="text-[#22C55E]" />
-            <span>EVALUATION / DEVELOPER QUICK LOGIN</span>
+        {process.env.NODE_ENV !== "production" && (
+          <div className="bg-[#111111] border border-[#262626] rounded-2xl p-4 flex flex-col gap-3 my-6">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#A1A1AA] border-b border-[#262626] pb-2">
+              <Settings size={14} className="text-[#22C55E]" />
+              <span>EVALUATION / DEVELOPER QUICK LOGIN</span>
+            </div>
+            <p className="text-[11px] text-[#A1A1AA]">
+              Click below to instantly log in and test both high-fidelity dashboards without SMS configuration:
+            </p>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                onClick={() => handleQuickLogin("gamer")}
+                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#22C55E]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
+              >
+                <UserCheck size={14} className="text-[#22C55E]" />
+                <span>Gamer Portal</span>
+              </button>
+              <button
+                onClick={() => handleQuickLogin("admin")}
+                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#EF4444]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
+              >
+                <ShieldCheck size={14} className="text-[#EF4444]" />
+                <span>Admin Console</span>
+              </button>
+            </div>
           </div>
-          <p className="text-[11px] text-[#A1A1AA]">
-            Click below to instantly log in and test both high-fidelity dashboards without SMS configuration:
-          </p>
-          <div className="grid grid-cols-2 gap-2.5">
-            <button
-              onClick={() => handleQuickLogin("gamer")}
-              className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#22C55E]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
-            >
-              <UserCheck size={14} className="text-[#22C55E]" />
-              <span>Gamer Portal</span>
-            </button>
-            <button
-              onClick={() => handleQuickLogin("admin")}
-              className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#EF4444]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
-            >
-              <ShieldCheck size={14} className="text-[#EF4444]" />
-              <span>Admin Console</span>
-            </button>
-          </div>
-        </div>
+        )}
 
         {/* Buttons / CTA */}
         <div className="flex flex-col gap-3">
