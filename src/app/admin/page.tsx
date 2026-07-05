@@ -14,7 +14,8 @@ import {
   X, 
   Search, 
   ArrowLeft, 
-  MessageSquare
+  MessageSquare,
+  LogOut
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 
@@ -33,8 +34,14 @@ export default function AdminDashboardPage() {
     toggleUserStatus,
     sendMessage,
     distributeMoney,
+    logout,
     initializeData 
   } = useAppStore();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+  };
 
   const [activeTab, setActiveTab] = useState<"overview" | "tasks" | "comms" | "withdrawals" | "users">("overview");
   const [loading, setLoading] = useState(true);
@@ -278,38 +285,48 @@ export default function AdminDashboardPage() {
       {/* Main Workspace layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Navigation Sidebar */}
-        <aside className="w-64 bg-[#111111] border-r border-[#262626] p-4 flex flex-col gap-1 shrink-0">
-          {[
-            { id: "overview", label: "Dashboard Summary", icon: Layers },
-            { id: "tasks", label: "Delta Force Tasks", icon: Plus },
-            { id: "comms", label: "Gamer Comms / Deposits", icon: MessageSquare, badge: activeThreads.length },
-            { id: "withdrawals", label: "Review Withdrawals", icon: ArrowDownToLine, badge: stats.pendingWithdrawals },
-            { id: "users", label: "Gamers Database", icon: Users }
-          ].map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id as "overview" | "tasks" | "comms" | "withdrawals" | "users")}
-                className={`w-full py-3 px-4 rounded-xl flex justify-between items-center font-semibold text-xs transition-colors cursor-pointer text-left ${
-                  isActive 
-                    ? "bg-[#124715]/15 text-[#124715] border border-[#124715]/20" 
-                    : "text-[#A1A1AA] hover:text-white hover:bg-[#181818]"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon size={16} />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge !== undefined && item.badge > 0 && (
-                  <span className="bg-[#EF4444] text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        <aside className="w-64 bg-[#111111] border-r border-[#262626] p-4 flex flex-col justify-between shrink-0">
+          <div className="flex flex-col gap-1">
+            {[
+              { id: "overview", label: "Dashboard Summary", icon: Layers },
+              { id: "tasks", label: "Delta Force Tasks", icon: Plus },
+              { id: "comms", label: "Gamer Comms / Deposits", icon: MessageSquare, badge: activeThreads.length },
+              { id: "withdrawals", label: "Review Withdrawals", icon: ArrowDownToLine, badge: stats.pendingWithdrawals },
+              { id: "users", label: "Gamers Database", icon: Users }
+            ].map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id as "overview" | "tasks" | "comms" | "withdrawals" | "users")}
+                  className={`w-full py-3 px-4 rounded-xl flex justify-between items-center font-semibold text-xs transition-colors cursor-pointer text-left ${
+                    isActive 
+                      ? "bg-[#124715]/15 text-[#124715] border border-[#124715]/20" 
+                      : "text-[#A1A1AA] hover:text-white hover:bg-[#181818]"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon size={16} />
+                    <span>{item.label}</span>
+                  </div>
+                  {item.badge !== undefined && item.badge > 0 && (
+                    <span className="bg-[#EF4444] text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="w-full py-3 px-4 rounded-xl flex items-center gap-3 font-semibold text-xs text-red-500 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer text-left mt-auto animate-fade-in"
+          >
+            <LogOut size={16} />
+            <span>Sign Out</span>
+          </button>
         </aside>
 
         {/* Content Panel */}
