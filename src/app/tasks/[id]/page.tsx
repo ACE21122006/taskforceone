@@ -90,7 +90,7 @@ export default function TaskDetailsPage() {
 
           <div className="flex gap-4 text-xs text-[#A1A1AA] border-t border-[#262626]/80 pt-3">
             <span className="flex items-center gap-1.5">
-              <Clock size={14} className="text-[#22C55E]" />
+              <Clock size={14} className="text-[#124715]" />
               <span>Est: {task.est_completion_time}</span>
             </span>
             <span className="flex items-center gap-1.5 capitalize">
@@ -105,7 +105,7 @@ export default function TaskDetailsPage() {
           {/* Instructions */}
           <div className="p-4 rounded-2xl bg-[#181818] border border-[#262626] flex flex-col gap-2">
             <div className="flex items-center gap-2 text-xs font-bold text-[#A1A1AA] border-b border-[#262626] pb-2 uppercase tracking-wide">
-              <FileText size={14} className="text-[#22C55E]" />
+              <FileText size={14} className="text-[#124715]" />
               <span>Job Instructions</span>
             </div>
             <p className="text-xs text-[#A1A1AA] leading-relaxed pt-1">
@@ -143,7 +143,7 @@ export default function TaskDetailsPage() {
               const message = `Hey admin, I've farmed coins for "${task.title}". I'm transferring them to you.`;
               router.push(`/notifications?msg=${encodeURIComponent(message)}`);
             }}
-            className="w-full py-4 bg-[#22C55E] hover:bg-[#16A34A] text-[#0A0A0A] font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
+            className="w-full py-4 bg-[#124715] hover:bg-[#124715] text-white font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
           >
             <span>Deposit Farmed Coins</span>
             <ChevronRight size={16} strokeWidth={2.5} />

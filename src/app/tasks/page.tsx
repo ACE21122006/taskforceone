@@ -73,9 +73,9 @@ function TasksContent() {
     <MobileContainer>
       <div className="flex-1 flex flex-col p-4">
         {/* Header Notice */}
-        <div className="bg-[#22C55E]/10 border border-[#22C55E]/20 p-4 rounded-2xl mb-5 text-[11px] text-[#A1A1AA] leading-relaxed">
+        <div className="bg-[#124715]/10 border border-[#124715]/20 p-4 rounded-2xl mb-5 text-[11px] text-[#A1A1AA] leading-relaxed">
           <span className="font-bold text-white block mb-0.5">ℹ️ COIN FARMING REFERENCE CATALOG</span>
-          These jobs serve as reference guides for Delta Force coin values and instructions. <strong>Tasks do not pay out TZS directly.</strong> To earn money, farm coins in-game and transfer them to the admin, then upload your proof via the <span className="text-[#22C55E] font-semibold cursor-pointer underline" onClick={() => router.push("/notifications")}>Inbox</span> tab to receive manually processed payouts.
+          These jobs serve as reference guides for Delta Force coin values and instructions. <strong>Tasks do not pay out TZS directly.</strong> To earn money, farm coins in-game and transfer them to the admin, then upload your proof via the <span className="text-[#124715] font-semibold cursor-pointer underline" onClick={() => router.push("/notifications")}>Inbox</span> tab to receive manually processed payouts.
         </div>
 
         {/* Main Tabs */}
@@ -84,7 +84,7 @@ function TasksContent() {
             onClick={() => setActiveTab("catalog")}
             className={`flex-1 py-3 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
               activeTab === "catalog"
-                ? "border-[#22C55E] text-[#22C55E]"
+                ? "border-[#124715] text-[#124715]"
                 : "border-transparent text-[#A1A1AA] hover:text-white"
             }`}
           >
@@ -94,7 +94,7 @@ function TasksContent() {
             onClick={() => setActiveTab("submissions")}
             className={`flex-1 py-3 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
               activeTab === "submissions"
-                ? "border-[#22C55E] text-[#22C55E]"
+                ? "border-[#124715] text-[#124715]"
                 : "border-transparent text-[#A1A1AA] hover:text-white"
             }`}
           >
@@ -113,7 +113,7 @@ function TasksContent() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search catalog jobs..."
-                  className="w-full bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-xs font-medium transition-colors placeholder:text-[#52525B]"
+                  className="w-full bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-xs font-medium transition-colors placeholder:text-[#52525B]"
                 />
               </div>
 
@@ -131,7 +131,7 @@ function TasksContent() {
                     onClick={() => setDifficultyFilter(filter.id as "all" | "easy" | "medium" | "hard" | "highest-reward")}
                     className={`py-2 px-3.5 text-xs font-semibold rounded-xl cursor-pointer transition-all shrink-0 border ${
                       difficultyFilter === filter.id
-                        ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]"
+                        ? "bg-[#124715]/10 border-[#124715] text-[#124715]"
                         : "bg-[#181818] border-[#262626] text-[#A1A1AA] hover:text-white hover:border-[#A1A1AA]/30"
                     }`}
                   >
@@ -161,7 +161,7 @@ function TasksContent() {
                         <div className="flex items-center gap-3 mt-1.5">
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${
                             task.difficulty === "easy" 
-                              ? "bg-[#22C55E]/10 text-[#22C55E]" 
+                              ? "bg-[#124715]/10 text-[#124715]" 
                               : task.difficulty === "medium" 
                                 ? "bg-[#F59E0B]/10 text-[#F59E0B]" 
                                 : "bg-[#EF4444]/10 text-[#EF4444]"
@@ -215,7 +215,7 @@ function TasksContent() {
                         </h4>
                         <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full capitalize ${
                           sub.status === "approved" 
-                            ? "bg-[#22C55E]/10 text-[#22C55E]" 
+                            ? "bg-[#124715]/10 text-[#124715]" 
                             : sub.status === "rejected" 
                               ? "bg-[#EF4444]/10 text-[#EF4444]" 
                               : "bg-[#F59E0B]/10 text-[#F59E0B]"
@@ -277,4 +277,3 @@ export default function TasksPage() {
     </Suspense>
   );
 }
-

@@ -84,14 +84,14 @@ export default function WalletPage() {
             <div>
               <span className="text-[10px] font-bold tracking-wider text-[#A1A1AA] uppercase">Available Balance</span>
               <div className="text-3xl font-bold tracking-tight text-white mt-1">
-                {availableBal.toLocaleString()} <span className="text-xs text-[#22C55E] font-semibold">TZS</span>
+                {availableBal.toLocaleString()} <span className="text-xs text-[#124715] font-semibold">TZS</span>
               </div>
             </div>
             
             <button
               onClick={() => router.push("/withdraw")}
               disabled={availableBal <= 0}
-              className="w-full py-3 bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-50 disabled:hover:bg-[#22C55E] text-[#0A0A0A] font-bold rounded-xl cursor-pointer transition-all text-xs flex items-center justify-center gap-1.5 shadow-md"
+              className="w-full py-3 bg-[#124715] hover:bg-[#124715] disabled:opacity-50 disabled:hover:bg-[#124715] text-white font-bold rounded-xl cursor-pointer transition-all text-xs flex items-center justify-center gap-1.5 shadow-md"
             >
               <ArrowUpRight size={14} strokeWidth={2.5} />
               <span>Withdraw to Mobile Money</span>
@@ -108,7 +108,7 @@ export default function WalletPage() {
             </div>
             <div className="p-4 rounded-2xl bg-[#181818] border border-[#262626] flex flex-col gap-1.5">
               <span className="text-[10px] text-[#A1A1AA]">Total Earned</span>
-              <div className="text-base font-bold text-[#22C55E]">
+              <div className="text-base font-bold text-[#124715]">
                 {lifetimeEar.toLocaleString()} TZS
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function WalletPage() {
                     <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${
                       tx.type === "withdrawal" 
                         ? "bg-red-500/10 text-[#EF4444]" 
-                        : "bg-[#22C55E]/10 text-[#22C55E]"
+                        : "bg-[#124715]/10 text-[#124715]"
                     }`}>
                       {tx.type === "withdrawal" ? <MinusCircle size={16} /> : <PlusCircle size={16} />}
                     </div>
@@ -148,7 +148,7 @@ export default function WalletPage() {
 
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     <span className={`text-xs font-bold ${
-                      tx.type === "withdrawal" ? "text-white" : "text-[#22C55E]"
+                      tx.type === "withdrawal" ? "text-white" : "text-[#124715]"
                     }`}>
                       {tx.type === "withdrawal" ? "-" : "+"}
                       {Math.abs(tx.amount_tzs).toLocaleString()} TZS
@@ -156,7 +156,7 @@ export default function WalletPage() {
                     
                     <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                       tx.status === "completed" 
-                        ? "text-[#22C55E] bg-[#22C55E]/10" 
+                        ? "text-[#124715] bg-[#124715]/10" 
                         : tx.status === "pending" 
                           ? "text-[#F59E0B] bg-[#F59E0B]/10" 
                           : "text-[#EF4444] bg-[#EF4444]/10"

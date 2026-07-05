@@ -112,7 +112,7 @@ export default function SubmitTaskPage() {
     return (
       <MobileContainer>
         <div className="flex-1 flex justify-center items-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#22C55E]" />
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#124715]" />
         </div>
       </MobileContainer>
     );
@@ -137,7 +137,7 @@ export default function SubmitTaskPage() {
 
         {success ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 py-12">
-            <div className="h-16 w-16 bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] rounded-full flex items-center justify-center animate-bounce">
+            <div className="h-16 w-16 bg-[#124715]/10 border border-[#124715]/20 text-[#124715] rounded-full flex items-center justify-center animate-bounce">
               <CheckCircle2 size={36} strokeWidth={2.2} />
             </div>
             <h3 className="text-lg font-bold text-white">Evidence Submitted</h3>
@@ -159,7 +159,7 @@ export default function SubmitTaskPage() {
               <span className="text-xs text-[#A1A1AA] font-medium truncate max-w-[65%]">
                 {task.title}
               </span>
-              <span className="text-xs font-bold text-[#22C55E]">
+              <span className="text-xs font-bold text-[#124715]">
                 {task.reward_tzs.toLocaleString()} TZS
               </span>
             </div>
@@ -167,7 +167,7 @@ export default function SubmitTaskPage() {
             {/* Coins Earned Input */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[11px] font-bold tracking-wider text-[#A1A1AA] uppercase flex items-center gap-1.5">
-                <Coins size={12} className="text-[#22C55E]" />
+                <Coins size={12} className="text-[#124715]" />
                 <span>Delta Force Coins Farmed</span>
               </label>
               <input
@@ -175,14 +175,14 @@ export default function SubmitTaskPage() {
                 value={coinsEarned}
                 onChange={(e) => setCoinsEarned(e.target.value)}
                 placeholder="e.g. 35000"
-                className="w-full bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 px-4 text-sm font-medium transition-colors placeholder:text-[#52525B]"
+                className="w-full bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 px-4 text-sm font-medium transition-colors placeholder:text-[#52525B]"
               />
             </div>
 
             {/* Screenshot Upload (Simulated) */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[11px] font-bold tracking-wider text-[#A1A1AA] uppercase flex items-center gap-1.5">
-                <ImageIcon size={12} className="text-[#22C55E]" />
+                <ImageIcon size={12} className="text-[#124715]" />
                 <span>Match Screenshot (Required)</span>
               </label>
               
@@ -210,12 +210,12 @@ export default function SubmitTaskPage() {
                   type="button"
                   onClick={() => simulateUpload("screenshot")}
                   disabled={screenshotUploading}
-                  className="h-32 bg-[#111111] border border-dashed border-[#262626] hover:border-[#22C55E]/40 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.99]"
+                  className="h-32 bg-[#111111] border border-dashed border-[#262626] hover:border-[#124715]/40 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.99]"
                 >
                   {screenshotUploading ? (
                     <div className="flex flex-col items-center gap-2 w-full px-8">
                       <div className="w-full bg-[#262626] h-1 rounded-full overflow-hidden">
-                        <div className="bg-[#22C55E] h-full" style={{ width: `${screenshotProgress}%` }} />
+                        <div className="bg-[#124715] h-full" style={{ width: `${screenshotProgress}%` }} />
                       </div>
                       <span className="text-[11px] text-[#A1A1AA]">Uploading screenshot... {screenshotProgress}%</span>
                     </div>
@@ -240,7 +240,7 @@ export default function SubmitTaskPage() {
               {videoUrl ? (
                 <div className="p-3 bg-[#111111] border border-[#262626] rounded-2xl flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <Video size={16} className="text-[#22C55E]" />
+                    <Video size={16} className="text-[#124715]" />
                     <span className="text-xs text-white">extraction_video.mp4</span>
                   </div>
                   <button
@@ -256,12 +256,12 @@ export default function SubmitTaskPage() {
                   type="button"
                   onClick={() => simulateUpload("video")}
                   disabled={videoUploading}
-                  className="h-20 bg-[#111111] border border-dashed border-[#262626] hover:border-[#22C55E]/40 rounded-2xl flex items-center justify-center gap-3 cursor-pointer transition-all active:scale-[0.99]"
+                  className="h-20 bg-[#111111] border border-dashed border-[#262626] hover:border-[#124715]/40 rounded-2xl flex items-center justify-center gap-3 cursor-pointer transition-all active:scale-[0.99]"
                 >
                   {videoUploading ? (
                     <div className="flex flex-col items-center gap-1 w-full px-8">
                       <div className="w-full bg-[#262626] h-1 rounded-full overflow-hidden">
-                        <div className="bg-[#22C55E] h-full" style={{ width: `${videoProgress}%` }} />
+                        <div className="bg-[#124715] h-full" style={{ width: `${videoProgress}%` }} />
                       </div>
                       <span className="text-[10px] text-[#A1A1AA]">Uploading video... {videoProgress}%</span>
                     </div>
@@ -286,7 +286,7 @@ export default function SubmitTaskPage() {
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Squad member was Juma_Fighter. Extracted at Valley North locker."
                 rows={3}
-                className="w-full bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-2xl py-3 px-4 text-xs font-medium transition-colors placeholder:text-[#52525B] resize-none"
+                className="w-full bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-2xl py-3 px-4 text-xs font-medium transition-colors placeholder:text-[#52525B] resize-none"
               />
             </div>
 
@@ -294,7 +294,7 @@ export default function SubmitTaskPage() {
             <button
               type="submit"
               disabled={loading || screenshotUploading || videoUploading}
-              className="w-full py-4 mt-3 bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-50 text-[#0A0A0A] font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
+              className="w-full py-4 mt-3 bg-[#124715] hover:bg-[#124715] disabled:opacity-50 text-white font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
             >
               {loading ? "Submitting Proof..." : "Submit Verification"}
             </button>

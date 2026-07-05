@@ -100,7 +100,7 @@ export default function DashboardPage() {
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center gap-3">
             {/* Avatar block */}
-            <div className="h-10 w-10 rounded-full bg-[#181818] border border-[#262626] flex items-center justify-center text-sm font-bold text-[#22C55E]">
+            <div className="h-10 w-10 rounded-full bg-[#181818] border border-[#262626] flex items-center justify-center text-sm font-bold text-[#124715]">
               {profile.username.slice(0, 2).toUpperCase()}
             </div>
             <div className="flex flex-col">
@@ -111,7 +111,7 @@ export default function DashboardPage() {
 
           <button
             onClick={() => router.push("/notifications")}
-            className="h-9 px-3 bg-[#181818] hover:bg-[#22C55E]/10 border border-[#262626] text-xs font-semibold rounded-xl text-[#A1A1AA] hover:text-[#22C55E] flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="h-9 px-3 bg-[#181818] hover:bg-[#124715]/10 border border-[#262626] text-xs font-semibold rounded-xl text-[#A1A1AA] hover:text-[#124715] flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <span>Inbox</span>
           </button>
@@ -120,14 +120,14 @@ export default function DashboardPage() {
         {/* 1. Wallet Card */}
         <div className="p-5 rounded-2xl bg-[#181818] border border-[#262626] flex flex-col gap-4 relative overflow-hidden">
           {/* Subtle design element */}
-          <div className="absolute -right-6 -bottom-6 text-[#22C55E]/5 pointer-events-none">
+          <div className="absolute -right-6 -bottom-6 text-[#124715]/5 pointer-events-none">
             <TrendingUp size={120} strokeWidth={1} />
           </div>
 
           <div>
             <span className="text-[11px] font-bold tracking-wider text-[#A1A1AA] uppercase">Available Balance</span>
             <div className="text-3xl font-bold tracking-tight text-white mt-1">
-              {availableBal.toLocaleString()} <span className="text-xs text-[#22C55E] font-semibold">TZS</span>
+              {availableBal.toLocaleString()} <span className="text-xs text-[#124715] font-semibold">TZS</span>
             </div>
           </div>
 
@@ -140,7 +140,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <span className="text-[10px] text-[#A1A1AA]">Lifetime Earnings</span>
-              <div className="text-sm font-semibold text-[#22C55E] mt-0.5">
+              <div className="text-sm font-semibold text-[#124715] mt-0.5">
                 {lifetimeEar.toLocaleString()} TZS
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xs font-bold tracking-wider text-[#A1A1AA] uppercase">Active Task</h3>
             {activeTask && (
-              <span className="text-[10px] text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-[10px] text-[#124715] bg-[#124715]/10 px-2 py-0.5 rounded-full font-medium">
                 Pending Review
               </span>
             )}
@@ -164,14 +164,14 @@ export default function DashboardPage() {
                 <h4 className="text-sm font-semibold text-white leading-tight max-w-[70%]">
                   {activeTask.title}
                 </h4>
-                <div className="text-xs font-semibold text-[#22C55E]">
+                <div className="text-xs font-semibold text-[#124715]">
                   +{activeTask.reward_tzs.toLocaleString()} TZS
                 </div>
               </div>
 
               <div className="flex items-center gap-4 text-[11px] text-[#A1A1AA] mt-1">
                 <span className="flex items-center gap-1">
-                  <Clock size={12} className="text-[#22C55E]" />
+                  <Clock size={12} className="text-[#124715]" />
                   <span>Est: {activeTask.est_completion_time}</span>
                 </span>
                 <span className="flex items-center gap-1">
@@ -203,7 +203,7 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => router.push("/tasks")}
-                className="py-2 px-4 mt-1 bg-[#22C55E] hover:bg-[#16A34A] text-[#0A0A0A] text-xs font-semibold rounded-xl transition-all cursor-pointer"
+                className="py-2 px-4 mt-1 bg-[#124715] hover:bg-[#124715] text-white text-xs font-semibold rounded-xl transition-all cursor-pointer"
               >
                 Find Tasks
               </button>
@@ -217,9 +217,9 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => router.push("/tasks")}
-              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#22C55E]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
+              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#124715]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
             >
-              <div className="h-8 w-8 rounded-xl bg-[#22C55E]/10 text-[#22C55E] flex items-center justify-center group-hover:bg-[#22C55E] group-hover:text-black transition-all">
+              <div className="h-8 w-8 rounded-xl bg-[#124715]/10 text-[#124715] flex items-center justify-center group-hover:bg-[#124715] group-hover:text-white transition-all">
                 <Plus size={16} />
               </div>
               <div className="flex justify-between items-center w-full">
@@ -230,7 +230,7 @@ export default function DashboardPage() {
 
             <button
               onClick={() => router.push("/tasks?tab=submissions")}
-              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#22C55E]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
+              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#124715]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
             >
               <div className="h-8 w-8 rounded-xl bg-[#A1A1AA]/10 text-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                 <ListCollapse size={16} />
@@ -243,7 +243,7 @@ export default function DashboardPage() {
 
             <button
               onClick={() => router.push("/wallet")}
-              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#22C55E]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
+              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#124715]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
             >
               <div className="h-8 w-8 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-black transition-all">
                 <TrendingUp size={16} />
@@ -256,9 +256,9 @@ export default function DashboardPage() {
 
             <button
               onClick={() => router.push("/withdraw")}
-              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#22C55E]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
+              className="p-4 rounded-2xl bg-[#181818] border border-[#262626] hover:border-[#124715]/40 text-left flex flex-col justify-between h-24 transition-all duration-200 cursor-pointer group"
             >
-              <div className="h-8 w-8 rounded-xl bg-[#22C55E]/10 text-[#22C55E] flex items-center justify-center group-hover:bg-[#22C55E] group-hover:text-black transition-all">
+              <div className="h-8 w-8 rounded-xl bg-[#124715]/10 text-[#124715] flex items-center justify-center group-hover:bg-[#124715] group-hover:text-white transition-all">
                 <ArrowUpRight size={16} />
               </div>
               <div className="flex justify-between items-center w-full">
@@ -283,7 +283,7 @@ export default function DashboardPage() {
                     <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${
                       activity.type === "withdrawal" 
                         ? "bg-red-500/10 text-[#EF4444]" 
-                        : "bg-[#22C55E]/10 text-[#22C55E]"
+                        : "bg-[#124715]/10 text-[#124715]"
                     }`}>
                       {activity.type === "withdrawal" ? <ArrowUpRight size={16} /> : <CheckCircle2 size={16} />}
                     </div>
@@ -300,14 +300,14 @@ export default function DashboardPage() {
 
                   <div className="flex flex-col items-end gap-1">
                     <span className={`text-xs font-bold ${
-                      activity.type === "withdrawal" ? "text-white" : "text-[#22C55E]"
+                      activity.type === "withdrawal" ? "text-white" : "text-[#124715]"
                     }`}>
                       {activity.type === "withdrawal" ? "-" : "+"}
                       {activity.amount.toLocaleString()} TZS
                     </span>
                     <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                       activity.status === "approved" 
-                        ? "text-[#22C55E] bg-[#22C55E]/10" 
+                        ? "text-[#124715] bg-[#124715]/10" 
                         : activity.status === "pending" 
                           ? "text-[#F59E0B] bg-[#F59E0B]/10" 
                           : "text-[#EF4444] bg-[#EF4444]/10"

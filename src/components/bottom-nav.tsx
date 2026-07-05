@@ -33,13 +33,13 @@ export function BottomNav() {
           >
             <div className={`p-1.5 rounded-xl transition-all duration-200 ${
               isActive 
-                ? "text-[#22C55E] bg-[#22C55E]/10" 
+                ? "text-[#124715] bg-[#124715]/10" 
                 : "text-[#A1A1AA] hover:text-white"
             }`}>
               <Icon size={20} strokeWidth={2.2} />
             </div>
             <span className={`text-[10px] font-medium tracking-wide transition-colors duration-200 ${
-              isActive ? "text-[#22C55E]" : "text-[#A1A1AA] group-hover:text-white"
+              isActive ? "text-[#124715]" : "text-[#A1A1AA] group-hover:text-white"
             }`}>
               {item.label}
             </span>
@@ -54,7 +54,7 @@ export function BottomNav() {
       >
         <div className={`p-1.5 rounded-xl transition-all duration-200 ${
           pathname === "/notifications"
-            ? "text-[#22C55E] bg-[#22C55E]/10"
+            ? "text-[#124715] bg-[#124715]/10"
             : "text-[#A1A1AA] hover:text-white"
         }`}>
           <div className="relative">
@@ -67,7 +67,7 @@ export function BottomNav() {
           </div>
         </div>
         <span className={`text-[10px] font-medium tracking-wide transition-colors duration-200 ${
-          pathname === "/notifications" ? "text-[#22C55E]" : "text-[#A1A1AA] group-hover:text-white"
+          pathname === "/notifications" ? "text-[#124715]" : "text-[#A1A1AA] group-hover:text-white"
         }`}>
           Inbox
         </span>

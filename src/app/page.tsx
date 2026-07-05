@@ -133,7 +133,7 @@ export default function SplashPage() {
         <div className="flex flex-col items-center text-center mt-12">
           {/* Minimalist Gaming Logo Icon */}
           <div className="h-16 w-16 bg-[#181818] border border-[#262626] rounded-2xl flex items-center justify-center shadow-lg mb-6">
-            <span className="text-[#22C55E] text-2xl font-bold tracking-tight">TFZ</span>
+            <span className="text-[#124715] text-2xl font-bold tracking-tight">TFZ</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
             Taskforce Zero
@@ -147,7 +147,7 @@ export default function SplashPage() {
         {process.env.NODE_ENV !== "production" && (
           <div className="bg-[#111111] border border-[#262626] rounded-2xl p-4 flex flex-col gap-3 my-6">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#A1A1AA] border-b border-[#262626] pb-2">
-              <Settings size={14} className="text-[#22C55E]" />
+              <Settings size={14} className="text-[#124715]" />
               <span>EVALUATION / DEVELOPER QUICK LOGIN</span>
             </div>
             <p className="text-[11px] text-[#A1A1AA]">
@@ -156,9 +156,9 @@ export default function SplashPage() {
             <div className="grid grid-cols-2 gap-2.5">
               <button
                 onClick={() => handleQuickLogin("gamer")}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#22C55E]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
+                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#124715]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
               >
-                <UserCheck size={14} className="text-[#22C55E]" />
+                <UserCheck size={14} className="text-[#124715]" />
                 <span>Gamer Portal</span>
               </button>
               <button
@@ -176,7 +176,7 @@ export default function SplashPage() {
         <div className="flex flex-col gap-3">
           <button
             onClick={() => router.push("/login")}
-            className="w-full py-4 bg-[#22C55E] hover:bg-[#16A34A] active:scale-[0.99] text-[#0A0A0A] font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-sm shadow-[0_4px_20px_rgba(34,197,94,0.2)]"
+            className="w-full py-4 bg-[#124715] hover:bg-[#124715] active:scale-[0.99] text-white font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-sm shadow-[0_4px_20px_rgba(34,197,94,0.2)]"
           >
             <span>Sign In to Account</span>
             <ArrowRight size={16} strokeWidth={2.5} />

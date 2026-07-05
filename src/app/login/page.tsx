@@ -147,7 +147,7 @@ export default function LoginPage() {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="e.g. 0712345678"
-                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
+                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
                   />
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setError("OTP/Password resets are simulated. Simply use a default phone/password to test.")}
-                    className="text-xs text-[#22C55E] hover:text-[#16A34A] cursor-pointer font-semibold"
+                    className="text-xs text-[#124715] hover:text-[#124715] cursor-pointer font-semibold"
                   >
                     Forgot?
                   </button>
@@ -172,7 +172,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
+                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 mt-6 bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-50 text-[#0A0A0A] font-semibold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2"
+                className="w-full py-4 mt-6 bg-[#124715] hover:bg-[#124715] disabled:opacity-50 text-white font-semibold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2"
               >
                 {loading ? "Authenticating..." : "Login"}
               </button>
@@ -192,7 +192,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => router.push("/register")}
-                    className="text-[#22C55E] hover:underline cursor-pointer font-semibold"
+                    className="text-[#124715] hover:underline cursor-pointer font-semibold"
                   >
                     Register here
                   </button>

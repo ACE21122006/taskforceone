@@ -156,7 +156,7 @@ export default function RegisterPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="e.g. Juma_Fighter"
-                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
+                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
                   />
                 </div>
               </div>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="e.g. 0712345678"
-                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
+                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
                   />
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
+                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
                   />
                 </div>
               </div>
@@ -204,7 +204,7 @@ export default function RegisterPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter password"
-                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
+                    className="w-full bg-[#18181B]/50 border border-[#262626] hover:border-[#A1A1AA]/30 focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium transition-colors placeholder:text-[#52525B] text-white"
                   />
                 </div>
               </div>
@@ -213,7 +213,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 mt-4 bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-50 text-[#0A0A0A] font-semibold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2"
+                className="w-full py-4 mt-4 bg-[#124715] hover:bg-[#124715] disabled:opacity-50 text-white font-semibold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2"
               >
                 {loading ? "Creating account..." : "Register"}
               </button>
@@ -224,7 +224,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => router.push("/login")}
-                    className="text-[#22C55E] hover:underline cursor-pointer font-semibold"
+                    className="text-[#124715] hover:underline cursor-pointer font-semibold"
                   >
                     Sign In
                   </button>

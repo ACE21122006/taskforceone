@@ -42,7 +42,7 @@ export default function ProfilePage() {
     return (
       <MobileContainer>
         <div className="flex-1 flex justify-center items-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#22C55E]" />
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#124715]" />
         </div>
       </MobileContainer>
     );
@@ -90,7 +90,7 @@ export default function ProfilePage() {
 
         {/* Profile Info Header */}
         <div className="flex flex-col items-center text-center p-5 bg-[#181818] border border-[#262626] rounded-2xl mb-5">
-          <div className="h-16 w-16 rounded-full bg-[#111111] border border-[#262626] flex items-center justify-center text-2xl font-bold text-[#22C55E] mb-3">
+          <div className="h-16 w-16 rounded-full bg-[#111111] border border-[#262626] flex items-center justify-center text-2xl font-bold text-[#124715] mb-3">
             {profile.username.slice(0, 2).toUpperCase()}
           </div>
           <h3 className="text-sm font-bold text-white leading-tight">{profile.username}</h3>
@@ -111,7 +111,7 @@ export default function ProfilePage() {
           </div>
           <div className="p-3 bg-[#181818] border border-[#262626] rounded-2xl flex flex-col items-center justify-center text-center gap-1">
             <span className="text-[9px] font-bold text-[#A1A1AA] uppercase tracking-wider">Success Rate</span>
-            <span className="text-sm font-bold text-[#22C55E]">{profile.success_rate}%</span>
+            <span className="text-sm font-bold text-[#124715]">{profile.success_rate}%</span>
           </div>
           <div className="p-3 bg-[#181818] border border-[#262626] rounded-2xl flex flex-col items-center justify-center text-center gap-1">
             <span className="text-[9px] font-bold text-[#A1A1AA] uppercase tracking-wider">Total Earned</span>
@@ -122,7 +122,7 @@ export default function ProfilePage() {
         {/* Developer Sandbox Controls (very nice for demo) */}
         <div className="p-4 bg-[#111111] border border-[#262626] rounded-2xl flex flex-col gap-3 mb-6">
           <span className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider flex items-center gap-1">
-            <ShieldAlert size={12} className="text-[#22C55E]" />
+            <ShieldAlert size={12} className="text-[#124715]" />
             <span>Developer Sandbox Options</span>
           </span>
           
@@ -132,7 +132,7 @@ export default function ProfilePage() {
               onClick={toggleMockModeState}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-colors cursor-pointer ${
                 isMockMode 
-                  ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]" 
+                  ? "bg-[#124715]/10 border-[#124715] text-[#124715]" 
                   : "bg-red-500/10 border-red-500 text-red-500"
               }`}
             >
@@ -163,7 +163,7 @@ export default function ProfilePage() {
             }}
             className="w-full py-2.5 bg-[#262626] hover:bg-[#323232] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
           >
-            <ArrowLeftRight size={14} className="text-[#22C55E]" />
+            <ArrowLeftRight size={14} className="text-[#124715]" />
             <span>Switch to Admin Portal</span>
           </button>
         </div>

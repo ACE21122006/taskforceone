@@ -224,7 +224,7 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center text-white">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-[#22C55E]" />
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-[#124715]" />
       </div>
     );
   }
@@ -290,7 +290,7 @@ export default function AdminDashboardPage() {
                 onClick={() => setActiveTab(item.id as "overview" | "tasks" | "comms" | "withdrawals" | "users")}
                 className={`w-full py-3 px-4 rounded-xl flex justify-between items-center font-semibold text-xs transition-colors cursor-pointer text-left ${
                   isActive 
-                    ? "bg-[#22C55E]/15 text-[#22C55E] border border-[#22C55E]/20" 
+                    ? "bg-[#124715]/15 text-[#124715] border border-[#124715]/20" 
                     : "text-[#A1A1AA] hover:text-white hover:bg-[#181818]"
                 }`}
               >
@@ -317,8 +317,8 @@ export default function AdminDashboardPage() {
               
               <div className="grid grid-cols-4 gap-6">
                 {[
-                  { label: "Total Registered Gamers", val: stats.totalUsers, icon: Users, color: "text-[#22C55E]" },
-                  { label: "Active Gamers", val: stats.activeUsers, icon: Users, color: "text-green-400" },
+                  { label: "Total Registered Gamers", val: stats.totalUsers, icon: Users, color: "text-[#124715]" },
+                  { label: "Active Gamers", val: stats.activeUsers, icon: Users, color: "text-[#124715]" },
                   { label: "Pending Reviews", val: stats.pendingReviews, icon: FileCheck, color: "text-amber-500" },
                   { label: "Pending Withdrawals", val: stats.pendingWithdrawals, icon: ArrowDownToLine, color: "text-red-400" }
                 ].map((s, idx) => {
@@ -341,11 +341,11 @@ export default function AdminDashboardPage() {
                   <span className="text-[11px] font-semibold text-[#A1A1AA] uppercase tracking-wider">
                     Total Rewards Paid to Gamers
                   </span>
-                  <span className="text-3xl font-bold mt-1 text-[#22C55E]">
+                  <span className="text-3xl font-bold mt-1 text-[#124715]">
                     {stats.totalRewardsPaid.toLocaleString()} TZS
                   </span>
                 </div>
-                <Coins className="text-[#22C55E]" size={36} />
+                <Coins className="text-[#124715]" size={36} />
               </div>
             </div>
           )}
@@ -358,7 +358,7 @@ export default function AdminDashboardPage() {
                 <h3 className="text-base font-bold text-white mb-2">Create New Task</h3>
                 
                 {taskSuccess && (
-                  <div className="p-4 rounded-xl bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-xs font-semibold">
+                  <div className="p-4 rounded-xl bg-[#124715]/10 border border-[#124715]/20 text-[#124715] text-xs font-semibold">
                     Task published successfully!
                   </div>
                 )}
@@ -371,7 +371,7 @@ export default function AdminDashboardPage() {
                       value={taskTitle}
                       onChange={(e) => setTaskTitle(e.target.value)}
                       placeholder="e.g. Farming valley weapons crates"
-                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium"
                     />
                   </div>
 
@@ -383,7 +383,7 @@ export default function AdminDashboardPage() {
                         value={taskReward}
                         onChange={(e) => setTaskReward(e.target.value)}
                         placeholder="e.g. 15000"
-                        className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium"
+                        className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
@@ -393,7 +393,7 @@ export default function AdminDashboardPage() {
                         value={taskEstTime}
                         onChange={(e) => setTaskEstTime(e.target.value)}
                         placeholder="e.g. 45 mins"
-                        className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium"
+                        className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium"
                       />
                     </div>
                   </div>
@@ -404,7 +404,7 @@ export default function AdminDashboardPage() {
                       <select
                         value={taskDifficulty}
                         onChange={(e) => setTaskDifficulty(e.target.value as "easy" | "medium" | "hard")}
-                        className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium"
+                        className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium"
                       >
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -417,7 +417,7 @@ export default function AdminDashboardPage() {
                         type="date"
                         value={taskDeadline}
                         onChange={(e) => setTaskDeadline(e.target.value)}
-                        className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-2.5 text-xs font-medium"
+                        className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-2.5 text-xs font-medium"
                       />
                     </div>
                   </div>
@@ -429,7 +429,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) => setTaskInstructions(e.target.value)}
                       placeholder="Detailed instructions for the gamer..."
                       rows={3}
-                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium resize-none"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium resize-none"
                     />
                   </div>
 
@@ -440,7 +440,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) => setTaskRequirements(e.target.value)}
                       placeholder="Minimum level, map settings, loadout items..."
                       rows={2}
-                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium resize-none"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium resize-none"
                     />
                   </div>
 
@@ -451,13 +451,13 @@ export default function AdminDashboardPage() {
                       onChange={(e) => setTaskSubmissionRules(e.target.value)}
                       placeholder="Screenshot requirement details..."
                       rows={2}
-                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium resize-none"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3 bg-[#22C55E] hover:bg-[#16A34A] text-black font-semibold rounded-xl text-xs cursor-pointer transition-colors shadow-md mt-2"
+                    className="w-full py-3 bg-[#124715] hover:bg-[#124715] text-white font-semibold rounded-xl text-xs cursor-pointer transition-colors shadow-md mt-2"
                   >
                     Publish Task to Feed
                   </button>
@@ -512,7 +512,7 @@ export default function AdminDashboardPage() {
                           key={thread.userId}
                           onClick={() => setSelectedGamerId(thread.userId)}
                           className={`w-full p-4 flex flex-col gap-1.5 transition-colors text-left cursor-pointer ${
-                            isSelected ? "bg-[#22C55E]/10" : "hover:bg-[#181818]"
+                            isSelected ? "bg-[#124715]/10" : "hover:bg-[#181818]"
                           }`}
                         >
                           <div className="flex justify-between items-center">
@@ -575,7 +575,7 @@ export default function AdminDashboardPage() {
                           setIsDistributeModalOpen(true);
                           setDistributeDescription(`Coin farming payout for ${profiles.find(p => p.id === selectedGamerId)?.username}`);
                         }}
-                        className="py-2 px-4 bg-[#22C55E] hover:bg-[#16A34A] text-black text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors shadow-md animate-pulse"
+                        className="py-2 px-4 bg-[#124715] hover:bg-[#124715] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors shadow-md animate-pulse"
                       >
                         <Coins size={14} />
                         <span>Distribute TZS Money</span>
@@ -608,7 +608,7 @@ export default function AdminDashboardPage() {
                             <div
                               className={`p-3.5 rounded-2xl border text-xs leading-relaxed flex flex-col gap-2 ${
                                 isAdmin
-                                  ? "bg-[#22C55E]/15 border-[#22C55E]/30 text-white rounded-tr-none"
+                                  ? "bg-[#124715]/15 border-[#124715]/30 text-white rounded-tr-none"
                                   : "bg-[#18181B] border-[#262626] text-white rounded-tl-none"
                               }`}
                             >
@@ -644,11 +644,11 @@ export default function AdminDashboardPage() {
                         value={adminReplyText}
                         onChange={(e) => setAdminReplyText(e.target.value)}
                         placeholder="Type reply to gamer..."
-                        className="flex-1 bg-[#18181B] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl py-3 px-4 text-xs font-semibold placeholder:text-[#52525B]"
+                        className="flex-1 bg-[#18181B] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl py-3 px-4 text-xs font-semibold placeholder:text-[#52525B]"
                       />
                       <button
                         type="submit"
-                        className="py-3 px-6 bg-[#22C55E] hover:bg-[#16A34A] text-black text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-md flex items-center gap-1.5"
+                        className="py-3 px-6 bg-[#124715] hover:bg-[#124715] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-md flex items-center gap-1.5"
                       >
                         <span>Send Reply</span>
                       </button>
@@ -679,7 +679,7 @@ export default function AdminDashboardPage() {
                 </button>
                 
                 <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
-                  <Coins className="text-[#22C55E]" size={18} />
+                  <Coins className="text-[#124715]" size={18} />
                   <span>Distribute Money (TZS)</span>
                 </h3>
                 <p className="text-[11px] text-[#A1A1AA] mb-4">
@@ -694,7 +694,7 @@ export default function AdminDashboardPage() {
                       value={distributeAmount}
                       onChange={(e) => setDistributeAmount(e.target.value)}
                       placeholder="e.g. 15000"
-                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-semibold text-white"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-semibold text-white"
                     />
                   </div>
 
@@ -705,13 +705,13 @@ export default function AdminDashboardPage() {
                       value={distributeDescription}
                       onChange={(e) => setDistributeDescription(e.target.value)}
                       placeholder="e.g. Completed Valley Run 100k coins payout"
-                      className="bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl p-3 text-xs font-medium text-white"
+                      className="bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl p-3 text-xs font-medium text-white"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3 mt-2 bg-[#22C55E] hover:bg-[#16A34A] text-black font-bold rounded-xl text-xs cursor-pointer transition-colors shadow-md"
+                    className="w-full py-3 mt-2 bg-[#124715] hover:bg-[#124715] text-white font-bold rounded-xl text-xs cursor-pointer transition-colors shadow-md"
                   >
                     Confirm & Credit Wallet
                   </button>
@@ -762,7 +762,7 @@ export default function AdminDashboardPage() {
                             </button>
                             <button
                               onClick={() => handleReviewWithdrawal(tx.id, "completed")}
-                              className="p-2 bg-[#22C55E]/10 hover:bg-[#22C55E]/20 text-[#22C55E] rounded-lg cursor-pointer transition-colors"
+                              className="p-2 bg-[#124715]/10 hover:bg-[#124715]/20 text-[#124715] rounded-lg cursor-pointer transition-colors"
                               title="Approve Payout"
                             >
                               <Check size={14} />
@@ -793,7 +793,7 @@ export default function AdminDashboardPage() {
                     value={userQuery}
                     onChange={(e) => setUserQuery(e.target.value)}
                     placeholder="Search gamers..."
-                    className="w-full bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl py-2 pl-9 pr-3 text-xs"
+                    className="w-full bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl py-2 pl-9 pr-3 text-xs"
                   />
                 </div>
               </div>
@@ -817,7 +817,7 @@ export default function AdminDashboardPage() {
                           <td className="p-4 font-bold text-white">{userProfile.username}</td>
                           <td className="p-4 text-[#A1A1AA] font-semibold">{userProfile.phone_number}</td>
                           <td className="p-4 text-white font-medium">{userProfile.tasks_completed}</td>
-                          <td className="p-4 text-[#22C55E] font-bold">{userProfile.success_rate}%</td>
+                          <td className="p-4 text-[#124715] font-bold">{userProfile.success_rate}%</td>
                           <td className="p-4 text-white font-bold">{userProfile.total_earnings.toLocaleString()} TZS</td>
                           <td className="p-4 text-right flex justify-end gap-2">
                             <button
@@ -826,7 +826,7 @@ export default function AdminDashboardPage() {
                                 setIsDistributeModalOpen(true);
                                 setDistributeDescription(`Manual wallet distribution for ${userProfile.username}`);
                               }}
-                              className="py-1.5 px-3 bg-[#22C55E]/10 hover:bg-[#22C55E]/20 text-[#22C55E] border border-[#22C55E]/25 rounded-lg text-[10px] font-bold cursor-pointer transition-all"
+                              className="py-1.5 px-3 bg-[#124715]/10 hover:bg-[#124715]/20 text-[#124715] border border-[#124715]/25 rounded-lg text-[10px] font-bold cursor-pointer transition-all"
                             >
                               Pay Gamer
                             </button>
@@ -835,7 +835,7 @@ export default function AdminDashboardPage() {
                               className={`py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
                                 userProfile.status === "active"
                                   ? "bg-red-500/10 border-red-500/20 text-red-500 hover:bg-red-500/20"
-                                  : "bg-[#22C55E]/10 border-[#22C55E]/20 text-[#22C55E] hover:bg-[#22C55E]/20"
+                                  : "bg-[#124715]/10 border-[#124715]/20 text-[#124715] hover:bg-[#124715]/20"
                               }`}
                             >
                               {userProfile.status === "active" ? "Suspend Gamer" : "Activate Gamer"}

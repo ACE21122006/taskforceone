@@ -5,12 +5,12 @@
   --foreground: #FFFFFF;
   --secondary-bg: #111111;
   --card-bg: #181818;
-  --primary-green: #22C55E;
-  --hover-green: #16A34A;
+  --primary-green: #124715;
+  --hover-green: #124715;
   --border-color: #262626;
   --secondary-text: #A1A1AA;
   --error-color: #EF4444;
-  --success-color: #22C55E;
+  --success-color: #124715;
   --warning-color: #F59E0B;
 }
 
@@ -54,7 +54,7 @@ body {
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #22C55E;
+  background: #124715;
 }
 
 /* Sticky bottom nav adjustments */

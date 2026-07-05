@@ -113,15 +113,15 @@ function InboxCommsContent() {
           <div>
             <span className="text-[10px] text-[#A1A1AA] uppercase tracking-wider font-bold">Direct Comms</span>
             <h2 className="text-sm font-bold text-white leading-tight flex items-center gap-1.5">
-              <MessageSquare size={14} className="text-[#22C55E]" />
+              <MessageSquare size={14} className="text-[#124715]" />
               <span>Admin Chat & Deposits</span>
             </h2>
           </div>
         </div>
 
         {/* Notice Info */}
-        <div className="bg-[#22C55E]/5 border-b border-[#22C55E]/10 p-3 text-[10px] text-[#A1A1AA] leading-relaxed flex gap-2 items-center">
-          <Coins size={14} className="text-[#22C55E] shrink-0" />
+        <div className="bg-[#124715]/5 border-b border-[#124715]/10 p-3 text-[10px] text-[#A1A1AA] leading-relaxed flex gap-2 items-center">
+          <Coins size={14} className="text-[#124715] shrink-0" />
           <span>Farmed coins are sent directly to the Admin. Send your screenshot proof and specify the amount in the chat below. Admin will verify and manually credit TZS.</span>
         </div>
 
@@ -153,7 +153,7 @@ function InboxCommsContent() {
                     className={`p-3.5 rounded-2xl border text-xs leading-relaxed flex flex-col gap-2 ${
                       isAdmin
                         ? "bg-[#18181B] border-[#262626] text-white rounded-tl-none"
-                        : "bg-[#22C55E]/15 border-[#22C55E]/30 text-white rounded-tr-none"
+                        : "bg-[#124715]/15 border-[#124715]/30 text-white rounded-tr-none"
                     }`}
                   >
                     {/* Coin Transfer Badge */}
@@ -243,12 +243,12 @@ function InboxCommsContent() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Type message or details here..."
-                className="flex-1 bg-[#18181B] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-xl py-3 px-4 text-xs font-semibold placeholder:text-[#52525B]"
+                className="flex-1 bg-[#18181B] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-xl py-3 px-4 text-xs font-semibold placeholder:text-[#52525B]"
               />
 
               <button
                 type="submit"
-                className="h-11 w-11 bg-[#22C55E] hover:bg-[#16A34A] text-[#0A0A0A] rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition-colors shadow-md"
+                className="h-11 w-11 bg-[#124715] hover:bg-[#124715] text-white rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition-colors shadow-md"
               >
                 <Send size={15} />
               </button>
@@ -262,7 +262,7 @@ function InboxCommsContent() {
                 disabled={isUploading || !!screenshotUrl}
                 className="flex-1 py-2 bg-[#18181B] hover:bg-[#262626] disabled:opacity-50 text-[10px] text-[#A1A1AA] hover:text-white font-bold rounded-xl border border-[#262626] flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
               >
-                <ImageIcon size={13} className="text-[#22C55E]" />
+                <ImageIcon size={13} className="text-[#124715]" />
                 <span>Attach Screenshot Proof</span>
               </button>
 

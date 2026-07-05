@@ -98,7 +98,7 @@ export default function WithdrawPage() {
 
         {success ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 py-12">
-            <div className="h-16 w-16 bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] rounded-full flex items-center justify-center animate-bounce">
+            <div className="h-16 w-16 bg-[#124715]/10 border border-[#124715]/20 text-[#124715] rounded-full flex items-center justify-center animate-bounce">
               <CheckCircle2 size={36} strokeWidth={2.2} />
             </div>
             <h3 className="text-lg font-bold text-white">Request Submitted</h3>
@@ -118,7 +118,7 @@ export default function WithdrawPage() {
             {/* Balances Display */}
             <div className="p-4 rounded-2xl bg-[#111111] border border-[#262626] flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <Wallet size={16} className="text-[#22C55E]" />
+                <Wallet size={16} className="text-[#124715]" />
                 <span className="text-xs text-[#A1A1AA] font-semibold">Available for cashout</span>
               </div>
               <span className="text-sm font-bold text-white">
@@ -144,7 +144,7 @@ export default function WithdrawPage() {
                     onClick={() => setMethod(prov.id as "mpesa" | "airtel_money" | "mixx_by_yas" | "halo_pesa")}
                     className={`py-3 px-2 text-center text-xs font-bold rounded-xl cursor-pointer border transition-colors ${
                       method === prov.id 
-                        ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]" 
+                        ? "bg-[#124715]/10 border-[#124715] text-[#124715]" 
                         : "bg-[#181818] border-[#262626] text-[#A1A1AA] hover:text-white"
                     }`}
                   >
@@ -164,7 +164,7 @@ export default function WithdrawPage() {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="e.g. 0712345678"
-                className="w-full bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 px-4 text-sm font-medium transition-colors placeholder:text-[#52525B]"
+                className="w-full bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 px-4 text-sm font-medium transition-colors placeholder:text-[#52525B]"
               />
             </div>
 
@@ -177,7 +177,7 @@ export default function WithdrawPage() {
                 <button
                   type="button"
                   onClick={() => setAmount(availableBal.toString())}
-                  className="text-xs text-[#22C55E] hover:underline cursor-pointer"
+                  className="text-xs text-[#124715] hover:underline cursor-pointer"
                 >
                   Use Max
                 </button>
@@ -187,7 +187,7 @@ export default function WithdrawPage() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Min 1,000 TZS"
-                className="w-full bg-[#111111] border border-[#262626] focus:border-[#22C55E] focus:outline-none rounded-2xl py-3.5 px-4 text-sm font-medium transition-colors placeholder:text-[#52525B]"
+                className="w-full bg-[#111111] border border-[#262626] focus:border-[#124715] focus:outline-none rounded-2xl py-3.5 px-4 text-sm font-medium transition-colors placeholder:text-[#52525B]"
               />
             </div>
 
@@ -199,7 +199,7 @@ export default function WithdrawPage() {
               </div>
               <div className="flex justify-between text-xs text-[#A1A1AA] border-t border-[#262626]/80 pt-2 font-bold">
                 <span className="text-white">Amount You Receive</span>
-                <span className="text-[#22C55E]">{finalAmount.toLocaleString()} TZS</span>
+                <span className="text-[#124715]">{finalAmount.toLocaleString()} TZS</span>
               </div>
             </div>
 
@@ -207,7 +207,7 @@ export default function WithdrawPage() {
             <button
               type="submit"
               disabled={loading || availableBal <= 0}
-              className="w-full py-4 mt-2 bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-50 text-[#0A0A0A] font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-1.5"
+              className="w-full py-4 mt-2 bg-[#124715] hover:bg-[#124715] disabled:opacity-50 text-white font-bold rounded-2xl cursor-pointer transition-all duration-200 text-sm shadow-[0_4px_24px_rgba(34,197,94,0.2)] flex items-center justify-center gap-1.5"
             >
               {loading ? "Processing Cashout..." : "Submit Withdrawal Request"}
               <ChevronRight size={16} strokeWidth={2.5} />
