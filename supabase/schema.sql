@@ -31,7 +31,7 @@ CREATE TABLE public.tasks (
 CREATE TABLE public.submissions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   task_id UUID REFERENCES public.tasks(id) ON DELETE CASCADE NOT NULL,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   screenshot_url TEXT,
   video_url TEXT,
   coins_earned INTEGER NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE public.submissions (
 -- Transactions table (wallet logs)
 CREATE TABLE public.transactions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   amount_tzs NUMERIC(12, 2) NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('reward', 'withdrawal', 'adjustment')),
   description TEXT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE public.transactions (
 -- Payout Methods table
 CREATE TABLE public.payout_methods (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   method TEXT NOT NULL CHECK (method IN ('mpesa', 'airtel_money', 'mixx_by_yas', 'halo_pesa')),
   phone_number TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
@@ -65,7 +65,7 @@ CREATE TABLE public.payout_methods (
 -- Notifications table
 CREATE TABLE public.notifications (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   title TEXT NOT NULL,
   message TEXT NOT NULL,
   is_read BOOLEAN DEFAULT FALSE,
@@ -143,7 +143,7 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
 -- Messages table (direct chat comms for coin deposits)
 CREATE TABLE public.messages (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   sender_role TEXT NOT NULL CHECK (sender_role IN ('gamer', 'admin')),
   message TEXT NOT NULL,
   screenshot_url TEXT,
