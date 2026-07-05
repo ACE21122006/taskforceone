@@ -179,34 +179,7 @@ export default function SplashPage() {
             </p>
           </div>
 
-          {/* Evaluation quick actions (highly professional and convenient) */}
-          {process.env.NODE_ENV !== "production" && (
-            <div className="bg-[#111111] border border-[#262626] rounded-2xl p-4 flex flex-col gap-3 my-6">
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#A1A1AA] border-b border-[#262626] pb-2">
-                <Settings size={14} className="text-[#124715]" />
-                <span>EVALUATION / DEVELOPER QUICK LOGIN</span>
-              </div>
-              <p className="text-[11px] text-[#A1A1AA]">
-                Click below to instantly log in and test both high-fidelity dashboards without SMS configuration:
-              </p>
-              <div className="grid grid-cols-2 gap-2.5">
-                <button
-                  onClick={() => handleQuickLogin("gamer")}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#124715]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
-                >
-                  <UserCheck size={14} className="text-[#124715]" />
-                  <span>Gamer Portal</span>
-                </button>
-                <button
-                  onClick={() => handleQuickLogin("admin")}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] border border-[#262626] hover:border-[#EF4444]/50 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white"
-                >
-                  <ShieldCheck size={14} className="text-[#EF4444]" />
-                  <span>Admin Console</span>
-                </button>
-              </div>
-            </div>
-          )}
+
 
           {/* Buttons / CTA */}
           <div className="flex flex-col gap-3">
