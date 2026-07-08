@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -11,6 +11,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Taskforce Zero | Tanzanian Gamers Workforce & Earnings",
   description: "Complete Delta Force coin farming tasks, earn real rewards, and withdraw instantly through M-Pesa, Airtel Money, or Mixx by Yas.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

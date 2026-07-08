@@ -12,6 +12,16 @@
   --error-color: #EF4444;
   --success-color: #124715;
   --warning-color: #F59E0B;
+
+  /* ── Font role tokens ──────────────────────────────────────────────
+     Only Inter is loaded. We map roles to weight/tracking variants
+     so typography can be tightened later without touching components. */
+  --font-heading: var(--font-inter), system-ui, sans-serif;
+  --font-body:    var(--font-inter), system-ui, sans-serif;
+  --font-accent:  var(--font-inter), system-ui, sans-serif;
+  /* Monospace: used for addresses, phone numbers, codes.
+     Falls back to system mono when Inter isn't suitable. */
+  --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
 }
 
 @theme {
@@ -30,15 +40,55 @@
   --radius-custom: 16px;
 }
 
+/* ── Safe-area top inset for notched devices ─────────────────────────
+   Applied to html (not body) so it doesn't interfere with body flex. */
+html {
+  padding-top: env(safe-area-inset-top);
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-body);
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── DVH fix ─────────────────────────────────────────────────────────
+   Tailwind's min-h-screen maps to min-height: 100vh which doesn't
+   account for dynamic browser chrome on mobile. Override to 100dvh
+   where supported, keeping 100vh as the safe fallback. */
+.min-h-screen {
+  min-height: 100vh;        /* fallback */
+  min-height: 100dvh;       /* mobile chrome aware */
+}
+
+/* ── Heading typography ──────────────────────────────────────────────
+   h1-h3 get the heading font (Inter, bold) with tighter tracking. */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/* ── Numeric / data elements ─────────────────────────────────────────
+   font-variant-numeric: tabular-nums keeps columns aligned.
+   Applies to elements already using font-mono class and to
+   common data display patterns. */
+.font-mono,
+[class*="tabular"],
+.text-price,
+.text-amount {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Custom scrollbars for a premium look */
