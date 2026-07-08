@@ -162,6 +162,8 @@ interface AppState {
   initializeData: () => Promise<void>;
   
   // Gamer actions
+  updateProfile: (updates: { username?: string; phone_number?: string }) => Promise<{ success: boolean; message: string }>;
+  changePassword: (newPassword: string) => Promise<{ success: boolean; message: string }>;
   acceptTask: (taskId: string) => Promise<void>;
   submitTaskProof: (
     taskId: string, 
@@ -546,6 +548,41 @@ export const useAppStore = create<AppState>()(
         }
       },
       
+      updateProfile: async (updates) => {
+        const { isMockMode, user, profile } = get();
+        if (!user || !profile) return { success: false, message: "Not authenticated" };
+        try {
+          if (isMockMode) {
+            const updated = { ...profile, ...updates };
+            set({ profile: updated });
+            return { success: true, message: "Profile updated successfully" };
+          }
+          const { error } = await supabase
+            .from("profiles")
+            .update(updates)
+            .eq("id", user.id);
+          if (error) return { success: false, message: getFriendlyErrorMessage(error) };
+          set({ profile: { ...profile, ...updates } });
+          return { success: true, message: "Profile updated successfully" };
+        } catch (err) {
+          return { success: false, message: getFriendlyErrorMessage(err) };
+        }
+      },
+
+      changePassword: async (newPassword) => {
+        const { isMockMode } = get();
+        if (isMockMode) {
+          return { success: true, message: "Password updated (demo mode)" };
+        }
+        try {
+          const { error } = await supabase.auth.updateUser({ password: newPassword });
+          if (error) return { success: false, message: getFriendlyErrorMessage(error) };
+          return { success: true, message: "Password changed successfully" };
+        } catch (err) {
+          return { success: false, message: getFriendlyErrorMessage(err) };
+        }
+      },
+
       acceptTask: async () => {
         const { user } = get();
         if (!user) return;
