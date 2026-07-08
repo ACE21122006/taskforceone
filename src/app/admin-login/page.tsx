@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ShieldCheck, ArrowLeft, KeyRound } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
-import { supabase } from "@/lib/supabase";
+import { supabase, getFriendlyErrorMessage } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
       }
     } catch (err) {
       console.error("Admin Login failed:", err);
-      setError(err instanceof Error ? err.message : "Authentication failed");
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }

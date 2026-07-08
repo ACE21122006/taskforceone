@@ -6,6 +6,7 @@ import { ArrowLeft, Wallet, AlertCircle, CheckCircle2, ChevronRight } from "luci
 import { useAppStore, getAvailableBalance } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
 import { BottomNav } from "@/components/bottom-nav";
+import { getFriendlyErrorMessage } from "@/lib/supabase";
 
 export default function WithdrawPage() {
   const router = useRouter();
@@ -71,11 +72,10 @@ export default function WithdrawPage() {
           router.push("/wallet");
         }, 2000);
       } else {
-        setError(res.message);
+        setError(getFriendlyErrorMessage(res.message));
       }
     } catch (err) {
-      const errMsg = err instanceof Error ? err.message : "Failed to submit withdrawal request.";
-      setError(errMsg);
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }

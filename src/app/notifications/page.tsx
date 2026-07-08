@@ -6,6 +6,7 @@ import { ArrowLeft, Send, Image as ImageIcon, Coins, MessageSquare, X } from "lu
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
 import { BottomNav } from "@/components/bottom-nav";
+import { getFriendlyErrorMessage } from "@/lib/supabase";
 
 function InboxCommsContent() {
   const router = useRouter();
@@ -81,8 +82,7 @@ function InboxCommsContent() {
       setScreenshotUrl("");
       setError(null);
     } catch (err) {
-      const errMsg = err instanceof Error ? err.message : "Failed to send message.";
-      setError(errMsg);
+      setError(getFriendlyErrorMessage(err));
     }
   };
 

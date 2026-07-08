@@ -123,13 +123,23 @@ CREATE POLICY "Allow users to manage own notifications" ON public.notifications
 -- Trigger to insert profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
+DECLARE
+  assigned_role TEXT;
 BEGIN
+  -- Default to gamer
+  assigned_role := 'gamer';
+  
+  -- Only assign admin if it matches the designated admin phone and email
+  IF (new.email = '0788888888@taskforcezero.com' AND new.raw_user_meta_data->>'username' = 'Taskforce_Zero_Manager') THEN
+    assigned_role := 'admin';
+  END IF;
+
   INSERT INTO public.profiles (id, username, phone_number, role, status)
   VALUES (
     new.id,
     COALESCE(new.raw_user_meta_data->>'username', 'Gamer_' || substring(new.id::text from 1 for 6)),
     COALESCE(new.phone, new.raw_user_meta_data->>'phone_number', 'Unknown'),
-    COALESCE(new.raw_user_meta_data->>'role', 'gamer'),
+    assigned_role,
     'active'
   );
   RETURN new;

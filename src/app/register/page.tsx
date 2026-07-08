@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, User, Phone, Lock } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
-import { supabase } from "@/lib/supabase";
+import { supabase, getFriendlyErrorMessage } from "@/lib/supabase";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -88,7 +88,7 @@ export default function RegisterPage() {
         });
 
         if (signUpErr) {
-          setError(signUpErr.message);
+          setError(getFriendlyErrorMessage(signUpErr));
         } else if (data.user) {
           // Profile is created via Postgres trigger — retry up to 5 times with 500ms delay
           let profileData = null;
@@ -127,8 +127,7 @@ export default function RegisterPage() {
         }
       }
     } catch (err) {
-      const errMsg = err instanceof Error ? err.message : "Registration failed. Try again.";
-      setError(errMsg);
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }

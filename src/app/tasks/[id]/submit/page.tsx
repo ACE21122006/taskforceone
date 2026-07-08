@@ -6,6 +6,7 @@ import { ArrowLeft, Image as ImageIcon, Video, UploadCloud, Coins, AlertCircle, 
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
 import { BottomNav } from "@/components/bottom-nav";
+import { getFriendlyErrorMessage } from "@/lib/supabase";
 
 export default function SubmitTaskPage() {
   const router = useRouter();
@@ -101,8 +102,7 @@ export default function SubmitTaskPage() {
         router.push("/tasks?tab=submissions");
       }, 1800);
     } catch (err) {
-      const errMsg = err instanceof Error ? err.message : "Failed to submit. Please try again.";
-      setValidationError(errMsg);
+      setValidationError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }

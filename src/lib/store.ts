@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { supabase } from "./supabase";
+import { supabase, getFriendlyErrorMessage } from "./supabase";
 
 export interface UserProfile {
   id: string;
@@ -686,7 +686,7 @@ export const useAppStore = create<AppState>()(
             description: `${method.toUpperCase().replace("_", " ")} withdrawal request to ${phone}`,
             status: "pending"
           });
-          if (error) return { success: false, message: error.message };
+          if (error) return { success: false, message: getFriendlyErrorMessage(error) };
           await initializeData();
           return { success: true, message: "Withdrawal request submitted successfully" };
         }

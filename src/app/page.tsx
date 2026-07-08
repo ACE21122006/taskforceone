@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ShieldCheck, ArrowRight, UserCheck, Settings } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
-import { supabase } from "@/lib/supabase";
+import { supabase, getFriendlyErrorMessage } from "@/lib/supabase";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -139,7 +139,7 @@ export default function SplashPage() {
       }
     } catch (err) {
       console.error("Quick Login failed:", err);
-      alert("Quick Login failed: " + (err instanceof Error ? err.message : String(err)));
+      alert("Quick Login failed: " + getFriendlyErrorMessage(err));
     }
   };
 
@@ -200,7 +200,7 @@ export default function SplashPage() {
             
             <div className="text-center mt-3">
               <p className="text-[11px] text-[#A1A1AA]">
-                Secure payments powered by M-Pesa, Airtel, & Yas.
+                crafted by 21
               </p>
             </div>
           </div>

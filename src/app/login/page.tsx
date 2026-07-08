@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Lock, Phone } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { MobileContainer } from "@/components/mobile-container";
-import { supabase } from "@/lib/supabase";
+import { supabase, getFriendlyErrorMessage } from "@/lib/supabase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -76,7 +76,7 @@ export default function LoginPage() {
         });
 
         if (authErr) {
-          setError(authErr.message);
+          setError(getFriendlyErrorMessage(authErr));
         } else if (data.user) {
           // Fetch profile
           const { data: profileData } = await supabase
@@ -94,8 +94,7 @@ export default function LoginPage() {
         }
       }
     } catch (err) {
-      const errMsg = err instanceof Error ? err.message : "Authentication failed. Try again.";
-      setError(errMsg);
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }
